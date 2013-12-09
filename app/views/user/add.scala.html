@@ -1,0 +1,109 @@
+@()
+
+@import helper._
+
+@moreScripts = {
+    <script src="@routes.Assets.at("javascripts/apartment.js")" type="text/javascript"></script>
+    
+    <script>
+	var CREATE_PATH = @routes.Apartments.create()
+	
+	function TypeaheadCtrl($scope) {
+  		$scope.selected = undefined;
+  		$scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+	}
+	
+	angular.module('project').controller('FormController',FormController);
+
+	</script>
+}
+
+@main("Welcome to Play 2.1", moreScripts) {
+<div id="body">
+	<table style="border-spacing: 0;" cellpadding="0" width="100%">
+		<tbody>
+			<tr>
+				<td style="padding-bottom: 30px;" class="c-left">
+					<h1 style="color: #bbbbbb; padding: 10px 0 15px 10px;">Выбирете рубрику для подачи объявления в Севастополе:</h1>
+					<ul class="rent-filter">
+						<li class=""><a class="button flt rent-offer arr" href="#">Сдам</a></li>
+					</ul>
+					<ul class="rent-filter2">
+						<li class=""><a class="button flt lt arr" href="#">Длительно</a></li>
+						<li class=""><a class="button flt st arr" href="#">Посуточно</a></li>
+					</ul>
+					<ul class="rent-filter3">
+						<li class=""><a class="button flt" href="#" id="ro-1">Кваритру</a></li>
+					</ul>
+				</td>
+				<td class="c-right"></td>
+			</tr>
+		</tbody>
+	</table>
+	<script>
+		var type = 0;
+		var period = 0;
+
+		$(".rent-filter a").click(function() {
+			$(".rent-filter a").removeClass("selected");
+			$(".rent-filter2 a").removeClass("selected");
+			$(this).addClass("selected");
+
+			$(".rent-filter2").hide();
+			$(".rent-filter3").hide();
+		});
+		$(".rent-filter .rent-want").click(function() {
+			type = 1;
+			$(".rent-filter2").show();
+		});
+		$(".rent-filter .rent-offer").click(function() {
+			type = 2;
+			$(".rent-filter2").show();
+		});
+		$(".rent-filter .rent-buy").click(function() {
+			type = 3;
+			showResult(type);
+		});
+		$(".rent-filter .rent-sell").click(function() {
+			type = 4;
+			showResult(type);
+		});
+
+		$(".rent-filter2 a").click(function() {
+			$(".rent-filter2 a").removeClass("selected");
+			$(this).addClass("selected");
+		});
+		$(".rent-filter2 .lt").click(function() {
+			period = 1;
+			showResult(type, period);
+		});
+		$(".rent-filter2 .st").click(function() {
+			period = 2;
+			showResult(type, period);
+		});
+
+		function showResult(type, period) {
+			$(".rent-filter3").show();
+
+			if (type == 1 || type == 2) {
+				var param = "?type=" + type + "&period=" + period + "&cid=1";
+
+				$("#ro-1").attr("href", "/add-apartment" + param);
+				$("#ro-2").attr("href", "/add-room" + param);
+				$("#ro-3").attr("href", "/add-house" + param);
+				$("#ro-4").attr("href", "/add-garage" + param);
+				$("#ro-5").attr("href", "/add-com-place" + param);
+				$("#ro-6").attr("href", "/add-stead" + param);
+				$("#ro-6").hide();
+			} else {
+				$("#ro-1").attr("href", "/add-apartment?type=" + type);
+				$("#ro-2").attr("href", "/add-room?type=" + type);
+				$("#ro-3").attr("href", "/add-house?type=" + type);
+				$("#ro-4").attr("href", "/add-garage?type=" + type);
+				$("#ro-5").attr("href", "/add-com-place?type=" + type);
+				$("#ro-6").attr("href", "/add-stead?type=" + type);
+			}
+		}
+	</script>
+</div>
+}

@@ -1,0 +1,57 @@
+@(apartments:List[db.mapping.Apartment],
+	currentPage:Int,
+	totalPages:Int,
+	pagination:scala.xml.NodeSeq,
+	apFilters:controllers.mapping.ApartmentFilters)(implicit request: 
+ play.api.mvc.Request[play.api.mvc.AnyContent])
+
+@moreScripts = {
+    <script src="@routes.Assets.at("javascripts/purl.js")" type="text/javascript"></script>
+}
+
+@main("Welcome to Play 2.1", moreScripts) {
+<div id="content">
+	<table class="cont-table">
+		<tbody>
+			<tr>
+				<td class="c-left">
+					<ul class="breadcrumb" style="margin-bottom: 5px;">
+                		<li><a href="#">Главная</a></li>
+                		<li><a href="#">АР Крым</a></li>
+                		<li class="active">Севастополь</li>
+              		</ul>
+              		@if(apartments.isEmpty){
+              			@notFound("Ничего не найдено")
+              		}else{
+						<div class="table-rows-count-info">Показано @currentPage из @totalPages</div>
+						<table cellpadding="0" width="100%" class="res-table display" id="result-table">
+							<thead>
+								<tr role="row">
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td>
+								@for(ap <- apartments) {
+									@big_ap_block(ap)
+								}
+								</td>
+							</tr>
+							</tbody>
+						</table>
+	
+						<ul class="pagination">
+							@pagination
+						</ul>
+					}
+				</td>
+				<td class="c-right" ng-controller="FiltersCtrl">
+					<h3>Подбор по параметрам</h3>
+					@filters(apFilters)
+			</tr>
+		</tbody>
+	</table>
+</div>
+}

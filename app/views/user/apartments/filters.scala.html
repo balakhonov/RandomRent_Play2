@@ -1,0 +1,31 @@
+@(apFilters:controllers.mapping.ApartmentFilters)
+
+<div class="search-block">
+
+	<fieldset id="ad-type-filter-fs">
+		<h4 class="side-title">Ваиант:</h4>
+		@apFilters.swhoAdTypes()
+	</fieldset>
+
+	<fieldset id="period-filter-fs">
+		<h4 class="side-title">Вид аренды:</h4>
+		@apFilters.swhoPeriods()
+	</fieldset>
+	
+	<fieldset id="price-filter-fs">
+		<h4 class="side-title">Цена:</h4>
+		@apFilters.showPriceSlider(0,10000,5)
+	</fieldset>
+
+	<fieldset id="rooms-filter-fs">
+		<h4 class="side-title">Количество комнат:</h4>
+		@apFilters.showRoomsSlider(1,8,1)
+	</fieldset>
+
+		@apFilters.showAdditionFilters()
+	
+	<fieldset id="location-filter-fs">
+		<h4 class="side-title">Район:</h4>
+		@apFilters.showDistricts()
+	</fieldset>
+</div>
