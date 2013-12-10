@@ -1,7 +1,6 @@
 package controllers
 
 import scala.concurrent.Future
-
 import controllers.Actions.ApartmentAction
 import controllers.Actions.ApartmentActionBuilder
 import controllers.Actions.JsonAction
@@ -21,9 +20,11 @@ import play.api.libs.json.Json.toJson
 import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.filters.csrf.CSRFCheck
+import models.db.dao.ProvinceDao
+import models.json.formatters.JsonProvinceFormatter
 
-object Apartments extends Controller {
-  private val LOG = Logger(Actions.getClass)
+object ApartmentController extends Controller {
+  private val LOG = Logger(getClass)
 
   implicit var apartmentFormatter = JsonApartmentFormatter
   var counter: Int = 0;
@@ -59,9 +60,11 @@ object Apartments extends Controller {
     Logging {
       Action { implicit request =>
         {
-          // validate
+          implicit var formatter = JsonProvinceFormatter
+          var provinces = toJson(ProvinceDao.getAll)
+          LOG.error(provinces.toString)
 
-          Ok(views.html.user.apartments.add_apartment())
+          Ok(views.html.user.apartments.add_apartment(provinces))
         }
       }
     }
@@ -73,13 +76,13 @@ object Apartments extends Controller {
     Session {
       JsonAction[Apartment](JsonApartmentFormatter) { implicit request =>
         {
-          var item = request.item
+          var apartment = request.item
 
           // validate
 
           // DAO create
           Future.successful(NotFound)
-          Ok(toJson(item))
+          Ok(toJson(apartment))
         }
       }
     }

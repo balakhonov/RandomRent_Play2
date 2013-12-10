@@ -1,15 +1,14 @@
 package models.db.mapping
 
 class City(
+  val id: Long,
   var name: String,
   var countryId: Long,
-  var provinceId: Int,
+  var provinceId: Long,
   var lat: Double,
   var lon: Double) extends BaseEntity {
 
-  val id: Long = 0L
-
-  def this() = this("", 0, 0, 0, 0)
+  def this() = this(0, "", 0, 0, 0, 0)
 
   override def toString() = {
     "City:{id:%s,name:%s,countryId:%s,provinceId:%s,lat:%s,lon:%s}"

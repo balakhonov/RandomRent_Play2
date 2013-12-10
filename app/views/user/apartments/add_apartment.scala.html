@@ -1,12 +1,15 @@
-@()
-
-@import helper._
+@(provinces:play.api.libs.json.JsValue)(implicit request:play.api.mvc.Request[play.api.mvc.AnyContent])
 
 @moreScripts = {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-select.min.css")"/>
+        
     <script src="@routes.Assets.at("javascripts/apartment.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/bootstrap-select.min.js")" type="text/javascript"></script>
     
     <script>
-	var CREATE_PATH = '@routes.Apartments.create()';
+	var CREATE_PATH = '@routes.ApartmentController.create()';
+	var PROVINCES = @{play.api.templates.Html(provinces.toString)}
+	console.log(PROVINCES);
 	
 	function TypeaheadCtrl($scope) {
   		$scope.selected = undefined;
@@ -15,157 +18,143 @@
 	
 	angular.module('project').controller('FormController',FormController);
 
+	$(function(){
+		
+	});
 	</script>
 }
 
 @main("Welcome to Play 2.1", moreScripts) {
-	
 <div ng-controller="FormController">
-<table cellpadding="0" style="width: 100%; border-spacing: 0;background: none;">
-	<tbody>
-		<tr>
-			<td class="c-left">
+			<div style="background: rgba(0, 0, 0, 0.4);padding: 0 30px;overflow: auto;">
 				<h1 style="color: #bbbbbb; padding: 10px 0 15px 10px;">Размещение объявления</h1>
-				<form>
+				<form name="apForm" ng-submit="save()" class="form form-horizontal" style="padding: 0 20px;">
 					<div class="add-apartment-form">
 						<table class="add-apartment-table" cellpadding="0" width="100%" style="background: none;">
 							<tbody>
 								<tr>
-									<td colspan="2"><h4>Основная информация</h4></td>
+									<td colspan="2"><h4 style="border-bottom: 1px solid #ccc;">Основная информация</h4></td>
 								</tr>
 								<tr>
-									<td style="width: 150px;">Рубрика:</td>
-									<td>Длительная аренда квартир<a class="change-rub" href="/add">Сменить рубрику</a></td>
+									<td style="width: 150px;"><label for="" class="control-label">Рубрика:</label></td>
+									<td>Длительная аренда квартир<a class="change-rub" href="/add">Сменить рубрику</a>
+									<input type="hidden" name="period" ng-model="period" value="@request.queryString.get("period")" />
+									</td>
 								</tr>
 								<tr>
-									<td>Тип объявления:</td>
-									<td>Сдам</td>
+									<td><label for="" class="control-label">Тип объявления:</label></td>
+									<td>
+										Сдам <input type="hidden" name="adType" ng-model="adType" value="@request.queryString.get("type")" />
+									</td>
 								</tr>
 								<tr>
-									<td>Регион:</td>
-									<td><select id="province-list" name="province-list"><option selected="selected"
-												value="L5HKKFUV433ZR1JU0NVM"></option>
-											<option value="VYLK5CDXFFGZC0YYJIHN">Автономная Республика Крым</option>
-											<option value="MAJIBTCYWJN5TEBENAQY">Винницкая область</option>
-											<option value="IGG1X3H3HXIFM3XU10NA">Волынская область</option>
-											<option value="1D0WTF24CEWOH1OD2LDF">Днепропетровская область</option>
-											<option value="QWIRW4RIQSLCUAQPQUMN">Донецкая область</option>
-											<option value="T11T31USUGEW2E2G3URJ">Житомирская область</option>
-											<option value="VOJUOL4V4TC5IPEW4N55">Закарпатская область</option>
-											<option value="QJHERIQZRLUVDEJRXNUD">Запорожская область</option>
-											<option value="JG43ND5ZJDDD3DVTYZZU">Ивано-Франковская область</option>
-											<option value="UD3UEYMLGEFUS2AJ2VVL">Киевская область</option>
-											<option value="3K3ZKTYUZM0KMMUONVAN">Кировоградская область</option>
-											<option value="EYYS1PWFI1KTFXR51XWI">Луганская область</option>
-											<option value="JED4G1CGWAB5QNBMX2NC">Львовская область</option>
-											<option value="JRH2OFR5PWVCYFJQSBIE">Николаевская область</option>
-											<option value="IY043CJBKMCMJHG1SYN1">Одесская область</option>
-											<option value="QZDR4PS3FMMNOHU0H3V4">Полтавская область</option>
-											<option value="ZOLD1WOBZAGQ1YZO52D5">Ровенская область</option>
-											<option value="K5TEZOGGCASLNMD1H4XC">Сумская область</option>
-											<option value="5VJ4UIG3K105QEGHOJDJ">Тернопольская область</option>
-											<option value="NZNVKKKVB2BBA0SHXF5Z">Харьковская область</option>
-											<option value="CGMOSWZ0JDZ0STSRFCZ3">Херсонская область</option>
-											<option value="RK3PHYRQOY5JUOWSPYPA">Хмельницкая область</option>
-											<option value="NFFLAFEEVRD2S0RAH5A4">Черкасская область</option>
-											<option value="TFQ4M0C12HP41FK0QYAZ">Черниговская область</option>
-											<option value="NM5BCFX0HWETE3TBH0M1">Черновицкая область</option></select></td>
+									<td><label for="" class="control-label">Регион:</label></td>
+									<td>
+										<select class="selectpicker" ng-options="i.id as i.name for i in provinces" ng-model="province"
+										data-live-search="true" data-width="250px" ng-change="loadCities()">
+											<option value=''>Выберите регион</option>
+										</select>
+									</td>
 								</tr>
-								<tr id="city-list-wrapper">
-									<td>Город:</td>
-									<td><select id="city-list">
-											<option selected="selected" value="OFAI3ZTITFD2KR42IBBD"></option>
-											<option value="4JYSEQGZOV5PC14Q0LX0">Алупка</option>
-											<option value="FA2KCEYOZQZK0RJRH3WG">Алушта</option>
-											<option value="XWICWPBH220ZA3KPMQ4B">Армянск</option>
-											<option value="JD0HWSA0VTAP2K02PYKN">Бахчисарай</option>
-											<option value="LO25FBODUT0UMJO4VEAC">Белогорск</option>
-											<option value="VBEWG2VGVIECQRDFWKKO">Джанкой</option>
-											<option value="FYKCCNDM3TSYIEBLHQG2">Евпатория</option>
-											<option value="IQET4M0Y4FGQ1ZR4B2ZB">Керчь</option>
-											<option value="Y5LRMDLAAWAC0C2YHIJ2">Красноперекопск</option>
-											<option value="FKYXDZDQ44ITE1R1U3MU">Саки</option>
-											<option value="XY2KDHEVZR2SMPAU241M">Севастополь</option>
-											<option value="UUDWSPY1D1CJZT0QDZM1">Симферополь</option>
-											<option value="4CFSI0CJGQ3YMNEJFJ5K">Старый Крым</option>
-											<option value="5CLDAHWOUWAWIN1SNKYI">Судак</option>
-											<option value="IODNF5KY25H5N3CJZSN0">Феодосия</option>
-											<option value="W0QRKMNTSAWMGAOQEBA5">Щёлкино</option>
-											<option value="W41TESYQ5BKKFBQ10UQZ">Ялта</option>
-									</select></td>
+								<tr id="city-list-wrapper" ng-hide="cityWrapper">
+									<td><label for="" class="control-label">Город:</label></td>
+									<td>
+										<select class="selectpicker" ng-options="i.id as i.name for i in cities" name="city" ng-model="city" 
+										data-live-search="true" data-width="250px" ng-change="loadDistricts()">
+												<option value=''>Выберите город</option>
+										</select>
+									</td>
 								</tr>
-								<tr id="district-list-wrapper"></tr>
-								<tr>
-									<td><span style="display: block; width: 150px;">Улица:</span></td>
-									<td><input id="street-input" name="F399836144983M2FF0R" type="text" placeholder="Пример: Юмашева 21"
-										value="Юмашева 25"></td>
+								<tr id="district-list-wrapper" ng-hide="districtWrapper">
+									<td><label for="" class="control-label">Район:</label></td>
+									<td>
+										<select class="selectpicker" ng-options="i.id as i.name for i in districts" name="district" ng-model="district" 
+										data-live-search="true" data-width="250px">
+												<option value=''>Выберите район</option>
+										</select>
+									</td>
+								</tr>
+								<tr class="control-group" ng-class="{error:!apForm.street.$valid}">
+									<td><label for="title" class="control-label">Улица:</label></td>
+									<td>
+										<input class="form-control" type="text" id="street" name="street" ng-model="street"
+										 valid-street style="width:250px;" placeholder="Пример: Юмашева 21"/>
+										<div class="help-inline">
+							                <span ng-show="!!apForm.street.$error.isBlank">Укажите заголовок</span>
+							                <span ng-show="!!apForm.street.$error.invalidLen">Не может быть длинее 20 символов</span>
+							            </div>
+									</td>
+								</tr>
+								<tr class="control-group" ng-class="{error:!apForm.title.$valid}">
+									<td><label for="title" class="control-label">Заголовок:</label></td>
+									<td>
+										<input class="form-control" type="text" id="title" name="title" ng-model="title" 
+										 valid-title placeholder="Пример: В центре города 2х комнатная с кондиционером"/>
+										<div class="help-inline">
+							                <span ng-show="!!apForm.title.$error.isBlank">Укажите заголовок</span>
+							                <span ng-show="!!apForm.title.$error.invalidLen">Не может быть длинее 70 символов</span>
+							            </div>
+									</td>
 								</tr>
 								<tr>
-									<td>Заголовок:</td>
-									<td><input value="В центре города 2х комнатная с кондиционером"
-										placeholder="Пример: В центре города 2х комнатная с кондиционером" type="text" name="F3998361449843AFIFK"><br>
-										<span id="add-title-err" class="error"></span></td>
-								</tr>
-								<tr>
-									<td>Комнат:</td>
-									<td><select id="bedroom-num-select" name="F399836144985YJ5GNU" class="bedroom-select"><option
-												value="1">1</option>
+									<td><label for="" class="control-label">Комнат:</label></td>
+									<td>
+										<select class="selectpicker" name="rooms" ng-model="rooms" class="bedroom-select" data-width="85px">
+											<option	value="1">1</option>
 											<option value="2">2</option>
 											<option value="3">3</option>
-											<option value="4">Больше</option></select></td>
+											<option value="4">4</option>
+											<option value="5">5</option>
+											<option value="6">6</option>
+											<option value="7">7</option>
+											<option value="8">8</option>
+										</select>
+									</td>
+								</tr>
+								<tr class="control-group" ng-class="{error:!apForm.price.$valid}">
+									<td><label for="price" class="control-label">Стоимость(Грн/мес):</label></td>
+									<td>
+										<input class="form-control" id="price" name="price" ng-model="price" 
+										type="text" style="width:85px;" valid-price />
+										<div class="help-inline">
+							                <span ng-show="!!apForm.price.$error.isBlank">Укажите стоимость</span>
+											<span ng-show="!!apForm.price.$error.invalidChars">Только целое число. Например: 2500</span>
+							                <span ng-show="!!apForm.price.$error.invalidLen">Не может быть длинее 10 символов</span>
+							            </div>
+        							</td>
 								</tr>
 								<tr>
-									<td>Стоимость(гр/мес):</td>
-									<td><input id="price-input" name="F399836144986YLTOYK" type="number" value="1500" min="1" max="40000"></td>
+									<td><label for="" class="control-label">Текст объявления:</label></td>
+									<td><textarea class="form-control" name="description" ng-model="description" style="height:200px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										</textarea></span></td>
 								</tr>
 								<tr>
-									<td>Текст объявления:</td>
-									<td><textarea id="description-input">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</textarea><br>
-										<span id="add-description-err" class="error"></span></td>
-								</tr>
-								<tr>
-									<td colspan="2"><h4>Дополнительная информация</h4></td>
-								</tr>
-								<tr>
-									<td colspan="2"><table style="border-spacing: 0;background: none;" cellpadding="0" width="100%">
+									<td><label for="" class="control-label">Дополнительно:</label></td>
+									<td><table class="checkbox" style="border-spacing: 0;background: none;" cellpadding="0" width="100%">
 											<tbody>
 												<tr>
-													<td><input checked="checked" id="furn-cb" type="checkbox" name="F3998361449892N22ZA" value="true"><input
-														type="hidden" name="F3998361449892N22ZA" value="false"><label for="furn-cb">С мебелью</label></td>
-													<td><input id="cab-tv-cb" type="checkbox" name="F399836144990AXXOX0" value="true"><input
-														type="hidden" name="F399836144990AXXOX0" value="false"><label for="cab-tv-cb">Кабельное
-															телевидение</label></td>
-													<td><input id="internet-cb" type="checkbox" name="F399836144991BUVTAL" value="true"><input
-														type="hidden" name="F399836144991BUVTAL" value="false"><label for="internet-cb">Интернет</label></td>
+													<td><label for="fu"><input id="fu" type="checkbox" name="fu" ng-model="fu" />С мебелью </label></td>
+													<td><label for="fr"><input id="fr" type="checkbox" name="fr" ng-model="fr" />Кабельное телевидение </label></td>
+													<td><label for="it"><input id="it" type="checkbox" name="it" ng-model="it" />Интернет</label></td>
 												</tr>
 												<tr>
-													<td><input type="checkbox" name="F399836144992GEN0WJ" value="true"><input type="hidden"
-														name="F399836144992GEN0WJ" value="false"><label for="air-condit-cb">Кондиционер</label></td>
-													<td><input checked="checked" id="laundry-fac-cb" type="checkbox" name="F399836144993EGI4CZ"
-														value="true"><input type="hidden" name="F399836144993EGI4CZ" value="false"><label
-														for="laundry-fac-cb">Стиральная машинка</label></td>
-													<td><input id="boiler-cb" type="checkbox" name="F3998361449945DOCHQ" value="true"><input
-														type="hidden" name="F3998361449945DOCHQ" value="false"><label for="boiler-cb">Бойлер</label></td>
+													<td><label for="ai"><input id="ai" type="checkbox" name="ai" ng-model="ai" />Кондиционер</label></td>
+													<td><label for="wa"><input id="wa" type="checkbox" name="wa" ng-model="wa" />Стиральная машинка</label></td>
+													<td><label for="bo"><input id="bo" type="checkbox" name="bo" ng-model="bo" />Бойлер</label></td>
 												</tr>
 												<tr>
-													<td><input checked="checked" id="fridge-cb" type="checkbox" name="F399836144995DH3DDR" value="true"><input
-														type="hidden" name="F399836144995DH3DDR" value="false"><label for="fridge-cb">Холодильник</label></td>
-													<td><input id="fireplace-cb" type="checkbox" name="F399836144996Y4MNGG" value="true"><input
-														type="hidden" name="F399836144996Y4MNGG" value="false"><label for="fireplace-cb">Камин</label></td>
-													<td><input id="parking-cb" type="checkbox" name="F399836144997RVUA2N" value="true"><input
-														type="hidden" name="F399836144997RVUA2N" value="false"><label for="parking-cb">Рядом
-															парковка</label></td>
+													<td><label for="fi"><input id="fi" type="checkbox" name="fi" ng-model="fi" />Холодильник</label></td>
+													<td><label for="ca"><input id="ca" type="checkbox" name="ca" ng-model="ca" />Камин</label></td>
+													<td><label for="ne"><input id="ne" type="checkbox" name="ne" ng-model="ne" />Рядом парковка</label></td>
 												</tr>
 											</tbody>
 										</table></td>
 								</tr>
 								<tr>
-									<td colspan="2"><h4>Фотографии</h4>
+									<td><label for="" class="control-label">Фотографии:</label></td>
+									<td>
 										<div>
-											<button id="add-photo-button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-												role="button" aria-disabled="false">
-												<span class="ui-button-text">Добавить фото</span>
-											</button>
+											<button class="btn btn-primary">Добавить фото</button>
 											<div style="width: 20em; border: 1pt solid silver; display: none" id="progress">
 												<div style="background: green; height: 1em; width: 0%" id="progress-bar"></div>
 											</div>
@@ -174,48 +163,43 @@
 										<ul id="images-list" class="ui-sortable" style=""></ul></td>
 								</tr>
 								<tr>
-									<td colspan="2"><h4>Контактные данные</h4></td>
+									<td colspan="2"><h4 style="border-bottom: 1px solid #ccc;">Контактные данные</h4></td>
 								</tr>
 								<tr>
-									<td>Телефон:</td>
-									<td><input id="mobile-input" placeholder="Пример: +38 (xxx) xxx-xx-xx" name="F3998361449984WX22E"
-										type="text" value="(099) 500-38-23"></td>
+									<td><label for="" class="control-label">Телефон:</label></td>
+									<td>
+										<input class="form-control" name="mobileNumber" ng-model="mobileNumber" 
+										placeholder="Пример: +38 (xxx) xxx-xx-xx" value="(099) 500-38-23" style="width:270px;"/>
+									</td>
+								</tr>
+								<tr>
+									<td><label for="" class="control-label">E-mail:</label></td>
+									<td>
+										<input class="form-control" name="email" ng-model="email" 
+										placeholder="Пример: balakhonov.yuriy&#64;gmail.com" 
+										value="balakhonov.yuriy&#64;gmail.com" style="width:270px;"/>
+									</td>
 								</tr>
 								<tr>
 									<td colspan="2"></td>
 								</tr>
 								<tr>
-									<td colspan="2"><input value="Опубликовать" class="button" type="submit" name="F399836244999XXVH3P"><input
-										value="true" type="hidden" name="F399836145000OR14E4"></td>
+									<td colspan="2">
+										<div class="form-actions">
+									        <input type="submit" class="btn btn-primary" value="Опубликовать" 
+									        id="formSubmitBtn" ng-show="formAllGood()"/>
+									    </div>
+	    							</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 				</form>
-				<div>
+				<div style="display:none;">
 					<form id="F399836145001LIFB4V">
 						<input style="display: none;" multiple="" data-url="/upload" name="files[]" type="file" id="file-uploader">
 					</form>
 				</div>
-			</td>
-			<td class="c-right"></td>
-		</tr>
-	</tbody>
-</table>
-
-	<input type="text" name="street" id="street" value="asd"/>
-	<input type="submit" class="btn primary" value="Send"/>
-	
-	<ul class="unstyled">
-        <li ng-repeat="todo in apartments">
-          <input type="checkbox" ng-model="todo.done">
-          <span class="done-{{todo.done}}">{{todo.title}}</span>
-        </li>
-      </ul>
-</div>
-
-<div class='container-fluid' ng-controller="TypeaheadCtrl">
-    <pre>Model: {{selected| json}}</pre>
-    <input type="text" ng-model="selected" typeahead="state for state in states | filter:$viewValue | limitTo:8">
-</div>
+			</div>
+	</div>
 }

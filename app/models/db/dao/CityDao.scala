@@ -37,53 +37,33 @@ object CityDao extends DAO(Schema.cities) {
     }
   }
 
-  //  def getList(parentId: Int): List[City] = {
-  //    if (parentId < 1) {
-  //      throw new IllegalArgumentException("Parent ID(" + parentId + ") should not be < 1")
-  //    }
-  //
-  //    var list = List[City]()
-  //
-  //    def process(session: Session): List[City] = {
-  //      var query = session.createQuery("FROM City WHERE provinceId = :parentId")
-  //      query.setParameter("parentId", parentId)
-  //
-  //      var it = query.list().iterator()
-  //      while (it.hasNext()) {
-  //        var el = it.next().asInstanceOf[City]
-  //        list ::= el
-  //      }
-  //
-  //      return list
-  //    }
-  //
-  //    execute(s => process(s))
-  //  }
-  //
-  //  /**
-  //   *
-  //   */
-  //  def getByCountry(parentId: Int): List[City] = {
-  //    if (parentId < 1) {
-  //      throw new IllegalArgumentException("Parent ID(" + parentId + ") should not be < 1")
-  //    }
-  //
-  //    var list = List[City]()
-  //
-  //    def process(session: Session): List[City] = {
-  //      var query = session.createQuery("FROM City WHERE countryId = :parentId")
-  //      query.setParameter("parentId", parentId)
-  //
-  //      var it = query.list().iterator()
-  //      while (it.hasNext()) {
-  //        var el = it.next().asInstanceOf[City]
-  //        list ::= el
-  //      }
-  //
-  //      return list
-  //    }
-  //
-  //    execute(s => process(s))
-  //  }
-  //
+  /**
+   *
+   */
+  def getByProvince(provinceId: Long): List[City] = {
+    if (provinceId < 1) {
+      throw new IllegalArgumentException("Province ID(%s) should not be < 1".format(provinceId))
+    }
+
+    transaction {
+      from(table)(s =>
+        where(s.provinceId === provinceId)
+          select (s)).toList
+    }
+  }
+
+  /**
+   *
+   */
+  def getByCountry(countryId: Long): List[City] = {
+    if (countryId < 1) {
+      throw new IllegalArgumentException("Country ID(%s) should not be < 1".format(countryId))
+    }
+
+    transaction {
+      from(table)(s =>
+        where(s.countryId === countryId)
+          select (s)).toList
+    }
+  }
 }

@@ -19,7 +19,6 @@ object DistrictDao extends DAO(Schema.districts) {
   private val LOG = Logger(getClass)
 
   def getByCity(cityId: Long): List[District] = {
-    LOG.debug("cityId: " + cityId)
     if (cityId < 1) {
       throw new IllegalArgumentException("City ID(%s) should not be < 1".format(cityId))
     }

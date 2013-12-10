@@ -63,33 +63,8 @@ label {
 	font-weight: bold;
 }
 
-h1 {
-	margin: 0;
-	padding: 0;
-	font-size: medium;
-	font-weight: bold;
-}
-
-h2 {
-	font-size: 13px;
-	font-weight: bold;
-}
-
-h3,th {
-	font-size: 13px;
-	font-weight: bold;
-}
-
-h4 {
-	font-size: 1em;
-}
-
-h5 {
-	font-size: .9em;
-}
-
-h6 {
-	font-size: .8em;
+table.checkbox td{
+	padding-right: 30px !important;
 }
 
 .truncate {
@@ -100,11 +75,7 @@ h6 {
 }
 
 .error {
-	color: red;
-}
-
-#header-wrapper {
-	
+	color: #ee5f5b;
 }
 
 #header {
@@ -112,12 +83,7 @@ h6 {
 	margin-right: auto;
 	margin-left: auto;
 	height: 54px;
-	/* 	background: url(../images/back2000.png) no-repeat center top; */
 	background-size: 968px;
-}
-
-#header .header-menu-wrapper {
-	
 }
 
 #header ul.menu {
@@ -140,7 +106,6 @@ h6 {
 	float: left;
 	border-left: 1px solid #222;
 	height: 45px;
-	/* 	z-index: 100; */
 }
 
 #header ul.menu>li:hover {
@@ -586,15 +551,14 @@ h6 {
 	padding-right: 10px;
 }
 
-.add-apartment-table h4 {
-	margin: 10px 0 2px 0;
-	color: #ccc;
-	font-size: 14px;
+.add-apartment-table tr {
+	height: 38px;
 }
 
 .add-apartment-table tr td {
-	padding: 3px 2px;
+	vertical-align: top; padding : 3px 2px;
 	white-space: nowrap;
+	padding: 3px 2px;
 }
 
 .add-apartment-table #title-input {
@@ -1125,4 +1089,11 @@ a.centre-25-link {
 	position: absolute;
 	z-index: 11;
 	background: #000 url(../images/back1000.gif);
+}
+
+.control-group.error input {
+	border-color: #b94a48;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }

@@ -24,6 +24,12 @@ class DAO[I <: BaseEntity](_table: Table[I]) {
     }
   }
 
+  def getAll(): List[I] = {
+    transaction {
+      from(table)(s => where(1 === 1) select (s)).toList
+    }
+  }
+
   def save(item: I): I = {
     transaction {
       table.insert(item)
