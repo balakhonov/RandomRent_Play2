@@ -13,6 +13,7 @@ class Apartment(
   var title: String,
   var description: String,
   var mobileNumber: String,
+  var email: String,
   var postedDate: Long,
   var fu: Boolean,
   var ai: Boolean,
@@ -25,11 +26,13 @@ class Apartment(
   var ne: Boolean,
   var district: Int,
   var archived: Boolean,
-  var moderated: Boolean) extends BaseEntity {
+  var moderated: Boolean,
+  var pLat: Double,
+  var pLong: Double) extends BaseEntity {
 
   val id: Long = 0L
 
-  def this() = this(0, "", 0, 0, 0, 0, 0, "", "", "", 0, false, false, false, false, false, false, false, false, false, 0, false, false)
+  def this() = this(0, "", 0, 0, 0, 0, 0, "", "", "", "", 0, false, false, false, false, false, false, false, false, false, 0, false, false, 0, 0)
 
   override def toString() = {
     "id = " + id + "street:" + street
@@ -50,6 +53,7 @@ object Apartment {
     title: String,
     description: String,
     mobileNumber: String,
+    email: String,
     postedDate: Long,
     fu: Boolean,
     ai: Boolean,
@@ -62,7 +66,9 @@ object Apartment {
     ne: Boolean,
     district: Int,
     archived: Boolean,
-    moderated: Boolean): Apartment = {
+    moderated: Boolean,
+    pLat: Double,
+    pLong: Double): Apartment = {
     new Apartment(
       cityId,
       street: String,
@@ -74,6 +80,7 @@ object Apartment {
       title,
       description,
       mobileNumber,
+      email,
       postedDate,
       fu,
       ai,
@@ -86,6 +93,8 @@ object Apartment {
       ne,
       district,
       archived,
-      moderated)
+      moderated,
+      pLat,
+      pLong)
   }
 }

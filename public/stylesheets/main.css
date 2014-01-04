@@ -5,8 +5,9 @@
 
 body {
 	background: url(../images/back1000.gif);
-	font-size: 13px;
-	font-family: Arial, Verdana, Helvetica, sans-serif;
+	font-size: 12px;
+	font-family: "Verdana", Arial, Helvetica, sans-serif;
+	color: #eeeeee;
 	color: #eeeeee;
 }
 
@@ -63,7 +64,7 @@ label {
 	font-weight: bold;
 }
 
-table.checkbox td{
+table.checkbox td {
 	padding-right: 30px !important;
 }
 
@@ -76,6 +77,11 @@ table.checkbox td{
 
 .error {
 	color: #ee5f5b;
+}
+
+.red-star {
+	color: #ee5f5b;
+	margin-left: 2px;
 }
 
 #header {
@@ -475,8 +481,11 @@ table.checkbox td{
 }
 
 #content-header #logo h1 {
+	margin: 0;
+	padding: 0;
 	color: #ccc;
 	font-size: 22px;
+	font-weight: bold;
 }
 
 #content-header #logo p {
@@ -556,9 +565,15 @@ table.checkbox td{
 }
 
 .add-apartment-table tr td {
-	vertical-align: top; padding : 3px 2px;
+	vertical-align: top;
+	padding: 3px 2px;
 	white-space: nowrap;
 	padding: 3px 2px;
+}
+
+.add-apartment-table .control-label {
+	float: right;
+	margin-right: 10px;
 }
 
 .add-apartment-table #title-input {

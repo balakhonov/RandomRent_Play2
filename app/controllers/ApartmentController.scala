@@ -80,8 +80,7 @@ object ApartmentController extends Controller {
 
           // validate
 
-          // DAO create
-          Future.successful(NotFound)
+          ApartmentDao.save(apartment)
           Ok(toJson(apartment))
         }
       }

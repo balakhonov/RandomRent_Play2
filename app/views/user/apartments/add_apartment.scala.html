@@ -3,134 +3,145 @@
 @moreScripts = {
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/bootstrap-select.min.css")"/>
         
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script src="@routes.Assets.at("javascripts/apartment.js")" type="text/javascript"></script>
     <script src="@routes.Assets.at("javascripts/bootstrap-select.min.js")" type="text/javascript"></script>
     
     <script>
 	var CREATE_PATH = '@routes.ApartmentController.create()';
 	var PROVINCES = @{play.api.templates.Html(provinces.toString)}
-	console.log(PROVINCES);
-	
-	function TypeaheadCtrl($scope) {
-  		$scope.selected = undefined;
-  		$scope.states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Dakota', 'North Carolina', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
-	}
-	
-	angular.module('project').controller('FormController',FormController);
-
-	$(function(){
-		
-	});
 	</script>
 }
 
 @main("Welcome to Play 2.1", moreScripts) {
-<div ng-controller="FormController">
-			<div style="background: rgba(0, 0, 0, 0.4);padding: 0 30px;overflow: auto;">
-				<h1 style="color: #bbbbbb; padding: 10px 0 15px 10px;">Размещение объявления</h1>
-				<form name="apForm" ng-submit="save()" class="form form-horizontal" style="padding: 0 20px;">
+<div id="FormController" ng-controller="FormController">
+			<div style="background: rgba(0, 0, 0, 0.4);padding: 0 30px;overflow: visible;">
+				<h1 style="color: #bbbbbb; padding: 10px 0 15px 10px;margin-top: 0;">Размещение объявления</h1>
+				<form name="apForm" ng-submit="save()" class="form form-horizontal" style="padding: 0 10px;">
 					<div class="add-apartment-form">
 						<table class="add-apartment-table" cellpadding="0" width="100%" style="background: none;">
 							<tbody>
 								<tr>
-									<td colspan="2"><h4 style="border-bottom: 1px solid #ccc;">Основная информация</h4></td>
+									<td colspan="3"><h4 style="border-bottom: 1px solid #ccc;">Основная информация</h4></td>
 								</tr>
 								<tr>
-									<td style="width: 150px;"><label for="" class="control-label">Рубрика:</label></td>
-									<td>Длительная аренда квартир<a class="change-rub" href="/add">Сменить рубрику</a>
-									<input type="hidden" name="period" ng-model="period" value="@request.queryString.get("period")" />
+									<td style="width: 180px;"><label for="" class="control-label">Рубрика</label></td>
+									<td colspan="2" style="padding-top: 12px;">Длительная аренда квартир<a class="change-rub" href="/add">Сменить рубрику</a>
+									<input type="hidden" name="period" value="@request.queryString.get("period")" />
 									</td>
 								</tr>
 								<tr>
-									<td><label for="" class="control-label">Тип объявления:</label></td>
-									<td>
-										Сдам <input type="hidden" name="adType" ng-model="adType" value="@request.queryString.get("type")" />
+									<td><label for="" class="control-label">Тип объявления</label></td>
+									<td colspan="2" style="padding-top: 12px;">
+										Сдам <input type="hidden" name="adType" value="@request.queryString.get("type")" />
 									</td>
 								</tr>
-								<tr>
-									<td><label for="" class="control-label">Регион:</label></td>
+								<tr ng-class="{error:(!apForm.street.$valid && cityWrapper)}">
+									<td><label for="" class="control-label">Регион<span class="red-star">*</span></label></td>
 									<td>
-										<select class="selectpicker" ng-options="i.id as i.name for i in provinces" ng-model="province"
+										<select class="selectpicker" ng-options="i as i.name for i in provinces" ng-model="province"
 										data-live-search="true" data-width="250px" ng-change="loadCities()">
-											<option value=''>Выберите регион</option>
+											<option value='' disabled selected>Выберите регион</option>
 										</select>
 									</td>
+									<td rowspan="4">
+										<div id="map" style="width: 435px; height: 200px;"></div>
+										<input type="hidden" name="pLat" ng-model="pLat"/>
+										<input type="hidden" name="pLong" ng-model="pLong"/>
+									</td>
 								</tr>
-								<tr id="city-list-wrapper" ng-hide="cityWrapper">
-									<td><label for="" class="control-label">Город:</label></td>
-									<td>
-										<select class="selectpicker" ng-options="i.id as i.name for i in cities" name="city" ng-model="city" 
+								<tr id="city-list-wrapper" ng-hide="cityWrapper" ng-class="{error:(!apForm.street.$valid && districtWrapper && streetWrapper)}">
+									<td><label for="" class="control-label">Город<span class="red-star">*</span></label></td>
+									<td colspan="2">
+										<select class="selectpicker" ng-options="i as i.name for i in cities" name="city" ng-model="city" 
 										data-live-search="true" data-width="250px" ng-change="loadDistricts()">
-												<option value=''>Выберите город</option>
+											<option value='' disabled selected>Выберите город</option>
 										</select>
 									</td>
 								</tr>
-								<tr id="district-list-wrapper" ng-hide="districtWrapper">
-									<td><label for="" class="control-label">Район:</label></td>
-									<td>
-										<select class="selectpicker" ng-options="i.id as i.name for i in districts" name="district" ng-model="district" 
+								<tr id="district-list-wrapper" ng-hide="districtWrapper" ng-class="{error:(!apForm.street.$valid && streetWrapper)}">
+									<td><label for="" class="control-label">Район<span class="red-star">*</span></label></td>
+									<td colspan="2">
+										<select class="selectpicker" ng-options="i.id as i.name for i in districts" name="district" 
+										ng-model="district" ng-change="onDistrictChange()" 
 										data-live-search="true" data-width="250px">
-												<option value=''>Выберите район</option>
+											<option value='' disabled selected>Выберите район</option>
 										</select>
 									</td>
 								</tr>
-								<tr class="control-group" ng-class="{error:!apForm.street.$valid}">
-									<td><label for="title" class="control-label">Улица:</label></td>
-									<td>
+								<tr class="control-group" ng-class="{error:!apForm.street.$valid}" ng-hide="streetWrapper">
+									<td><label for="title" class="control-label">Улица<span class="red-star">*</span></label></td>
+									<td colspan="2">
 										<input class="form-control" type="text" id="street" name="street" ng-model="street"
-										 valid-street style="width:250px;" placeholder="Пример: Юмашева 21"/>
+										 valid-street style="width:250px;" placeholder="Пример: Юмашева 21" />
 										<div class="help-inline">
-							                <span ng-show="!!apForm.street.$error.isBlank">Укажите заголовок</span>
-							                <span ng-show="!!apForm.street.$error.invalidLen">Не может быть длинее 20 символов</span>
+							                <span ng-show="!!apForm.street.$error.isBlank">Укажите улицу</span>
+							                <span ng-show="!!apForm.street.$error.invalidLen">Не должен быть длинее 20 символов</span>
 							            </div>
 									</td>
 								</tr>
+							</table>
+								
+						<table class="add-apartment-table" cellpadding="0" style="background: none;width:100%;margin-top: 10px;">
 								<tr class="control-group" ng-class="{error:!apForm.title.$valid}">
-									<td><label for="title" class="control-label">Заголовок:</label></td>
-									<td>
+									<td style="width: 180px;"><label for="title" class="control-label">Заголовок<span class="red-star">*</span></label></td>
+									<td colspan="2">
 										<input class="form-control" type="text" id="title" name="title" ng-model="title" 
 										 valid-title placeholder="Пример: В центре города 2х комнатная с кондиционером"/>
 										<div class="help-inline">
-							                <span ng-show="!!apForm.title.$error.isBlank">Укажите заголовок</span>
-							                <span ng-show="!!apForm.title.$error.invalidLen">Не может быть длинее 70 символов</span>
+							                <span ng-show="!!apForm.title.$error.isBlank">Не должен быть пустым</span>
+							                <span ng-show="!!apForm.title.$error.invalidLen">Не должен быть длинее 70 символов</span>
 							            </div>
 									</td>
 								</tr>
-								<tr>
-									<td><label for="" class="control-label">Комнат:</label></td>
-									<td>
-										<select class="selectpicker" name="rooms" ng-model="rooms" class="bedroom-select" data-width="85px">
-											<option	value="1">1</option>
-											<option value="2">2</option>
-											<option value="3">3</option>
-											<option value="4">4</option>
-											<option value="5">5</option>
-											<option value="6">6</option>
-											<option value="7">7</option>
-											<option value="8">8</option>
-										</select>
+								<tr class="control-group" ng-class="{error:!apForm.rooms.$valid}">
+									<td><label for="" class="control-label">Комнат<span class="red-star">*</span></label></td>
+									<td colspan="2">
+										<div>
+											<select class="selectpicker" name="rooms" ng-model="rooms" 
+											class="bedroom-select" data-width="105px" valid-rooms>
+												<option value='' disabled selected>Выбрать</option>
+												<option	value="1">1</option>
+												<option value="2">2</option>
+												<option value="3">3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+												<option value="6">6</option>
+												<option value="7">7</option>
+												<option value="8">8</option>
+											</select>
+										</div>
+										<div class="help-inline">
+							                <span ng-show="!!apForm.rooms.$error.isBlank">Укажите количество комнат</span>
+							            </div>
 									</td>
 								</tr>
 								<tr class="control-group" ng-class="{error:!apForm.price.$valid}">
-									<td><label for="price" class="control-label">Стоимость(Грн/мес):</label></td>
-									<td>
+									<td><label for="price" class="control-label">Стоимость(Грн/мес)<span class="red-star">*</span></label></td>
+									<td colspan="2">
 										<input class="form-control" id="price" name="price" ng-model="price" 
-										type="text" style="width:85px;" valid-price />
+										type="text" style="width:105px;" valid-price />
 										<div class="help-inline">
 							                <span ng-show="!!apForm.price.$error.isBlank">Укажите стоимость</span>
 											<span ng-show="!!apForm.price.$error.invalidChars">Только целое число. Например: 2500</span>
-							                <span ng-show="!!apForm.price.$error.invalidLen">Не может быть длинее 10 символов</span>
+							                <span ng-show="!!apForm.price.$error.invalidLen">Не должен быть длинее 10 символов</span>
 							            </div>
         							</td>
 								</tr>
-								<tr>
-									<td><label for="" class="control-label">Текст объявления:</label></td>
-									<td><textarea class="form-control" name="description" ng-model="description" style="height:200px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-										</textarea></span></td>
+								<tr class="control-group" ng-class="{error:!apForm.description.$valid}">
+									<td><label for="" class="control-label">Текст объявления<span class="red-star">*</span></label></td>
+									<td colspan="2">
+										<textarea class="form-control" name="description" ng-model="description" 
+										style="height:200px;" valid-description>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+										</textarea>
+										<div class="help-inline">
+							                <span ng-show="!!apForm.description.$error.isBlank">Не должен быть пустым</span>
+							                <span ng-show="!!apForm.description.$error.invalidLen">Не должен быть длинее 500 символов</span>
+							            </div></td>
 								</tr>
 								<tr>
-									<td><label for="" class="control-label">Дополнительно:</label></td>
-									<td><table class="checkbox" style="border-spacing: 0;background: none;" cellpadding="0" width="100%">
+									<td><label for="" class="control-label">Дополнительно</label></td>
+									<td colspan="2"><table class="checkbox" style="border-spacing: 0;background: none;" cellpadding="0" width="100%">
 											<tbody>
 												<tr>
 													<td><label for="fu"><input id="fu" type="checkbox" name="fu" ng-model="fu" />С мебелью </label></td>
@@ -151,8 +162,8 @@
 										</table></td>
 								</tr>
 								<tr>
-									<td><label for="" class="control-label">Фотографии:</label></td>
-									<td>
+									<td><label for="" class="control-label">Фотографии</label></td>
+									<td colspan="2">
 										<div>
 											<button class="btn btn-primary">Добавить фото</button>
 											<div style="width: 20em; border: 1pt solid silver; display: none" id="progress">
@@ -163,31 +174,42 @@
 										<ul id="images-list" class="ui-sortable" style=""></ul></td>
 								</tr>
 								<tr>
-									<td colspan="2"><h4 style="border-bottom: 1px solid #ccc;">Контактные данные</h4></td>
+									<td colspan="3"><h4 style="border-bottom: 1px solid #ccc;">Контактные данные</h4></td>
 								</tr>
-								<tr>
-									<td><label for="" class="control-label">Телефон:</label></td>
-									<td>
+								<tr class="control-group" ng-class="{error:!apForm.mobileNumber.$valid}">
+									<td><label for="" class="control-label">Телефон<span class="red-star">*</span></label></td>
+									<td colspan="2">
 										<input class="form-control" name="mobileNumber" ng-model="mobileNumber" 
-										placeholder="Пример: +38 (xxx) xxx-xx-xx" value="(099) 500-38-23" style="width:270px;"/>
+										placeholder="Пример: +38 (xxx) xxx-xx-xx" value="(099) 500-38-23" style="width:270px;"
+										valid-mobile/>
+										<div class="help-inline">
+							                <span ng-show="!!apForm.mobileNumber.$error.isBlank">Не должен быть пустым</span>
+											<span ng-show="!!apForm.mobileNumber.$error.invalidChars">Неверный формат. Пример: Пример: +38 (xxx) xxx-xx-xx</span>
+							                <span ng-show="!!apForm.mobileNumber.$error.invalidLen">Не должен быть длинее 20 символов</span>
+							            </div></td>
 									</td>
 								</tr>
-								<tr>
-									<td><label for="" class="control-label">E-mail:</label></td>
-									<td>
+								<tr class="control-group" ng-class="{error:!apForm.email.$valid}">
+									<td><label for="" class="control-label">E-mail<span class="red-star">*</span></label></td>
+									<td colspan="2">
 										<input class="form-control" name="email" ng-model="email" 
 										placeholder="Пример: balakhonov.yuriy&#64;gmail.com" 
-										value="balakhonov.yuriy&#64;gmail.com" style="width:270px;"/>
+										value="balakhonov.yuriy&#64;gmail.com" style="width:270px;" valid-email/>
+										<div class="help-inline">
+							                <span ng-show="!!apForm.email.$error.isBlank">Не должен быть пустым</span>
+											<span ng-show="!!apForm.email.$error.invalidChars">Неверный формат e-mail адреса</span>
+							                <span ng-show="!!apForm.email.$error.invalidLen">Не должен быть длинее 40 символов</span>
+							            </div></td>
 									</td>
 								</tr>
 								<tr>
-									<td colspan="2"></td>
+									<td colspan="3"></td>
 								</tr>
 								<tr>
-									<td colspan="2">
+									<td colspan="3">
 										<div class="form-actions">
 									        <input type="submit" class="btn btn-primary" value="Опубликовать" 
-									        id="formSubmitBtn" ng-show="formAllGood()"/>
+									        id="formSubmitBtn"/>
 									    </div>
 	    							</td>
 								</tr>
@@ -201,5 +223,5 @@
 					</form>
 				</div>
 			</div>
-	</div>
+</div>
 }
