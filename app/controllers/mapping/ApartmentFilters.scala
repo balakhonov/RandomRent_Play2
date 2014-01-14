@@ -11,8 +11,8 @@ class ApartmentFilters(val reqParMam: ApartmentsP) extends AbstractFilters(reqPa
   private val LOG = Logger(getClass)
   private var distrits = DistrictDao.getByCity(reqParMam.cityId).sortBy(_.name)
 
-  private val adTypes = List(("0", "Сниму"), ("1", "Сдам"))
-  private val periods = List(("0", "Длительно"), ("1", "Посуточно"))
+  private val adTypes = List(("1", "Сниму"), ("2", "Сдам"))
+  private val periods = List(("1", "Длительно"), ("2", "Посуточно"))
 
   /**
    * 

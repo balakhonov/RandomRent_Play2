@@ -3,38 +3,45 @@
 # ~~~~
 
 # Home page
-GET      /                                   controllers.Application.index
+GET       /                                   controllers.Application.index
 
 # /ua/Киев?page=1&adtype=1&period=1&rooms=1&prf=1500&prt=2500&dist=14&fu=true
-GET      /ua                                 controllers.Application.index
-GET      /ua/                                controllers.Application.index
-GET      /ua/:city                           controllers.ApartmentController.show(city,page:Int?= 1)
-GET      /ua/:city/:page                     controllers.ApartmentController.show(city,page:Int)
+GET       /ua                                 controllers.Application.index
+GET       /ua/                                controllers.Application.index
+GET       /ua/:city                           controllers.ApartmentController.show(city,page:Int?= 1)
+GET       /ua/:city/:page                     controllers.ApartmentController.show(city,page:Int)
 
-GET      /add                                controllers.Application.add()
-GET      /add/                               controllers.Application.add()
+GET       /add                                controllers.Application.add()
+GET       /add/                               controllers.Application.add()
 
 # Apartment
-GET      /update-apartment/:id               controllers.ApartmentController.get(id:Int)
-GET      /add-apartment                      controllers.ApartmentController.addApartment()
-GET      /add-apartment/                     controllers.ApartmentController.addApartment()
-POST     /apartment                          controllers.ApartmentController.create(archived:Boolean=true,moderated:Boolean=true)
-POST     /apartment/                         controllers.ApartmentController.create(archived:Boolean=true,moderated:Boolean=true)
-PUT      /apartment/:id                      controllers.ApartmentController.update(id:Int)
-DELETE   /apartment/:id                      controllers.ApartmentController.delete(id:Int)
+GET       /update-apartment/:id               controllers.ApartmentController.get(id:Int)
+GET       /add-apartment                      controllers.ApartmentController.addApartment()
+GET       /add-apartment/                     controllers.ApartmentController.addApartment()
+POST      /apartment                          controllers.ApartmentController.create(archived:Boolean=true,moderated:Boolean=true)
+POST      /apartment/                         controllers.ApartmentController.create(archived:Boolean=true,moderated:Boolean=true)
+PUT       /apartment/:id                      controllers.ApartmentController.update(id:Int)
+DELETE    /apartment/:id                      controllers.ApartmentController.delete(id:Int)
+
+# Apartment upload image
+POST      /upload                             controllers.FileUploadController.upload()
+GET       /upload                             controllers.FileUploadController.upload()
+OPTIONS   /upload                             controllers.FileUploadController.upload()
+GET       /ap-images/:fileName                controllers.FileUploadController.loadImage(fileName:String)
+DELETE    /ap-images/delete/:fileName         controllers.FileUploadController.delete(fileName:String)
 
 # City
-GET      /json/city/:cityId                  controllers.CityController.get(cityId:Int)
-GET      /json/province_cities/:provinceId   controllers.CityController.getByProvince(provinceId:Int)
-GET      /json/country_cities/:countryId     controllers.CityController.getByCountry(countryId:Int)
+GET       /json/city/:cityId                  controllers.CityController.get(cityId:Int)
+GET       /json/province_cities/:provinceId   controllers.CityController.getByProvince(provinceId:Int)
+GET       /json/country_cities/:countryId     controllers.CityController.getByCountry(countryId:Int)
 
 # District
-GET      /json/district/:districtId          controllers.DistrictController.get(districtId:Int)
-GET      /json/city/:cityId/districts        controllers.DistrictController.getByCity(cityId: Int)
+GET       /json/district/:districtId          controllers.DistrictController.get(districtId:Int)
+GET       /json/city/:cityId/districts        controllers.DistrictController.getByCity(cityId: Int)
 
 
-GET      /echo                               controllers.Application.echo
-GET      /todo                               controllers.Application.TODO
+GET       /echo                               controllers.Application.echo
+GET       /todo                               controllers.Application.TODO
 
 # Map static resources from the /public folder to the /assets URL path
-GET      /assets/*file                       controllers.Assets.at(path="/public", file)
+GET       /assets/*file                       controllers.Assets.at(path="/public", file)

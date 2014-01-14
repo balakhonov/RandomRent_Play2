@@ -7,6 +7,9 @@
 
 @moreScripts = {
     <script src="@routes.Assets.at("javascripts/purl.js")" type="text/javascript"></script>
+    <script>
+    var app = angular.module("project", ['ngResource','ngRoute','ui.bootstrap','ngCookies']);
+    </script>
 }
 
 @main("Welcome to Play 2.1", moreScripts) {

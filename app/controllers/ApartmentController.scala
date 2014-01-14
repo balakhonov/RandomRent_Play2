@@ -22,6 +22,9 @@ import play.api.mvc.Controller
 import play.filters.csrf.CSRFCheck
 import models.db.dao.ProvinceDao
 import models.json.formatters.JsonProvinceFormatter
+import javax.imageio.ImageIO
+import java.io.File
+import java.util.UUID
 
 object ApartmentController extends Controller {
   private val LOG = Logger(getClass)
@@ -47,7 +50,7 @@ object ApartmentController extends Controller {
     Logging {
       ApartmentActionBuilder(id) { request =>
         {
-          Ok(views.html.user.apartments.apartment(request.apartment)).withSession((Util.USER_ID, "1"))
+          Ok(views.html.user.apartments.apartment(request.apartment))
         }
       }
     }
@@ -62,9 +65,11 @@ object ApartmentController extends Controller {
         {
           implicit var formatter = JsonProvinceFormatter
           var provinces = toJson(ProvinceDao.getAll)
-          LOG.error(provinces.toString)
+          LOG.debug("request.session: " + request.session);
 
-          Ok(views.html.user.apartments.add_apartment(provinces))
+          var uuid = request.session.get("uuid").map { uuid => uuid }.getOrElse { UUID.randomUUID().toString() }
+          FileUploadController.IMAGES_MAP.remove(uuid);
+          Ok(views.html.user.apartments.add_apartment(provinces)).withSession("uuid" -> uuid)
         }
       }
     }

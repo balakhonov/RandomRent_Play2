@@ -934,17 +934,29 @@ table.checkbox td {
 }
 
 #images-list {
-	overflow: auto;
+	overflow: visible;
 }
 
 #images-list .thumb-img-wrap {
+	position: relative;
 	float: left;
 	width: 150px;
-	height: 150px;
+	height: 157px;
 	margin: 2px;
-	overflow: hidden;
+	margin-right: 10px;
 	background: #111;
 	border: solid 1px #ccc;
+	overflow: visible;
+}
+
+#images-list .thumb-img-wrap .progress {
+	height: 5px;
+}
+
+#images-list .thumb-img-wrap .delete,#images-list .thumb-img-wrap .cancel {
+	position: absolute;
+	right: -10px;
+	top: -10px;
 }
 
 #images-list .thumb-img {
@@ -958,6 +970,8 @@ table.checkbox td {
 
 #images-list .thumb-img img {
 	margin: 0 auto;
+	max-width: 148px;
+	max-height: 148px;
 }
 
 a.province {

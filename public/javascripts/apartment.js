@@ -27,6 +27,7 @@ function FormController($scope, $resource, $timeout) {
 	google.maps.event.addDomListener(window, 'load', initialize);
 
 	$('.selectpicker').selectpicker();
+	FileUploader();
 
 	$scope.loadCities = function() {
 		var provinceId = $scope.province.id;
@@ -148,6 +149,14 @@ function FormController($scope, $resource, $timeout) {
 		}
 	}
 
+	$scope.addPhoto = function() {
+		$('#choose-photos').click();
+	}
+
+	$scope.startUpload = function() {
+		$('#start-upload').click();
+	}
+
 	function initialize() {
 		geocoder = new google.maps.Geocoder();
 		var mapOptions = {
@@ -171,8 +180,45 @@ function FormController($scope, $resource, $timeout) {
 	}
 }
 
-function TextValidator(ctrl, options, callback) {
+function FileUploader() {
+	var fileUploader = $('#fileupload');
+	var progress = $('#progress');
+	var progressBar = $('#progress-bar');
+	var imagesList = $("#images-list");
+	var index = 0;
+	var counter = 0;
+	var maxFiles = 12;
 
+	var fileList = [];
+	fileUploader.fileupload({
+		filesContainer : imagesList,
+		sequentialUploads : true,
+		previewMaxWidth : 148,
+		previewMaxHeight : 146,
+		maxNumberOfFiles : maxFiles,
+		callbackUploadListener:function(count){
+			if(count == 0){
+        		$("#upload-photos-button").hide();
+        	}else{
+        		$("#upload-photos-button").show();
+        	}
+		},
+        callbackLimitReached:function(isReached){
+        	if(isReached){
+        		$("#add-photos-button").attr("disabled", "disabled");
+        	}else{
+        		$("#add-photos-button").removeAttr("disabled");
+        	}
+        },
+		callbackGlobalError : function(message) {
+			console.warn(message);
+		},
+		maxFilesLimitMessage : "Вы не можете добавить больше " + maxFiles + " фотографий",
+		url : '/upload'
+	});
+}
+
+function TextValidator(ctrl, options, callback) {
 	this.validate = function() {
 		var value = (typeof (ctrl.$viewValue) == "undefined") ? "" : ctrl.$viewValue;
 
