@@ -4,6 +4,7 @@
 
 # Home page
 GET       /                                   controllers.Application.index
+GET       /$lang<[a-z]{2}>                    controllers.Application.indexI18n(lang)
 
 # /ua/Киев?page=1&adtype=1&period=1&rooms=1&prf=1500&prt=2500&dist=14&fu=true
 GET       /ua                                 controllers.Application.index

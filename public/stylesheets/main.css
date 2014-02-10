@@ -877,6 +877,8 @@ table.checkbox td {
 
 #main h2 {
 	margin-bottom: 10px;
+	font-size: 13px;
+	font-weight: bold;
 }
 
 #main .separator {
@@ -899,17 +901,6 @@ table.checkbox td {
 	-webkit-box-shadow: 0 7px 10px rgba(0, 0, 0, 0.5);
 	-moz-box-shadow: 0 7px 10px rgba(0, 0, 0, 0.5);
 	box-shadow: 0 7px 10px rgba(0, 0, 0, 0.5);
-}
-
-#footer .logo {
-	display: none;
-	position: absolute;
-	top: 21px;
-	right: 16px;
-	width: 110px;
-	height: 110px;
-	background: url(/images/rr-icon.png) no-repeat;
-	background-size: 110px;
 }
 
 #footer .menu {

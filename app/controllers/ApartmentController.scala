@@ -1,7 +1,6 @@
 package controllers
 
 import java.util.UUID
-
 import controllers.Actions.ApartmentAction
 import controllers.Actions.ApartmentActionBuilder
 import controllers.Actions.JsonAction
@@ -22,6 +21,7 @@ import play.api.libs.json.Json.toJson
 import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.filters.csrf.CSRFCheck
+import play.api.i18n.Lang
 
 object ApartmentController extends Controller {
   private val LOG = Logger(getClass)
@@ -58,15 +58,17 @@ object ApartmentController extends Controller {
    */
   def addApartment() =
     Logging {
-      Action { implicit request =>
+      Action { request =>
         {
           implicit var formatter = JsonProvinceFormatter
+          implicit val lang = new Lang("ru")
+
           var provinces = toJson(ProvinceDao.getAll)
           LOG.debug("request.session: " + request.session);
 
           var uuid = request.session.get("uuid").map { uuid => uuid }.getOrElse { UUID.randomUUID().toString() }
           FileUploadController.IMAGES_MAP.remove(uuid);
-          Ok(views.html.user.apartments.add_apartment(provinces)).withSession("uuid" -> uuid)
+          Ok(views.html.user.apartments.add_apartment(provinces, request)).withSession("uuid" -> uuid)
         }
       }
     }

@@ -1,4 +1,4 @@
-function FormController($scope, $resource, $timeout) {
+function AddApartmentFormController($scope, $resource, $timeout) {
 	// Map
 	var UKRAINE_LOCATION = new google.maps.LatLng(48.379433, 31.16558);
 	var geocoder;
@@ -270,7 +270,7 @@ ApartmentValidationModel.directive('validStreet', function() {
 				isBlank : true,
 				maxLength : 20
 			}, function() {
-				angular.element($("#FormController")).scope().showPosition();
+				angular.element($("#add-apartment-form-controller")).scope().showPosition();
 			});
 
 			ApartmentValidationModel.validators.push(validator);

@@ -1,22 +1,26 @@
-@(metaTags: Html , moreScripts: Html, headerContent:Html)(content: Html)(implicit lang:Lang)
-
-@import play.i18n.Messages
-
+@(title: String, moreScripts: Html = Html(""))(content: Html)
 <!DOCTYPE html>
 
 <html ng-app="project">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-
-		@metaTags
-
-		<link rel="stylesheet" href="@routes.ResourceManager.getResourse("stylesheets/bootstrap.min.css")"/>
-		<link rel="stylesheet" href="@routes.ResourceManager.getResourse("stylesheets/main.css")"/>
-		<link rel="shortcut icon" type="image/png" href="@routes.ResourceManager.getResourse("images/favicon.png")"/>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-1.9.0.min.js")"></script>
+    <head>
+        <title>@title</title>
+        
+        <link rel="stylesheet" href="@routes.ResourceManager.getResourse("stylesheets/bootstrap.min.css")"/>
+        <link rel="stylesheet" href="@routes.ResourceManager.getResourse("stylesheets/bootstrap-slider.css")"/>
+        <link rel="stylesheet" href="@routes.ResourceManager.getResourse("stylesheets/main.css")"/>
+        <link rel="shortcut icon" type="image/png" href="@routes.ResourceManager.getResourse("images/favicon.png")"/>
+        <script src="@routes.ResourceManager.getResourse("javascripts/jquery-1.9.0.min.js")" type="text/javascript"></script>
     	
-		@moreScripts
+        <script src="@routes.ResourceManager.getResourse("javascripts/angular/1.2.3/angular.min.js")" type="text/javascript"></script>
+    	<script src="@routes.ResourceManager.getResourse("javascripts/angular/1.2.3/angular-route.min.js")" type="text/javascript"></script>    
+    	<script src="@routes.ResourceManager.getResourse("javascripts/angular/1.2.3/angular-resource.min.js")" type="text/javascript"></script>
+    	<script src="@routes.ResourceManager.getResourse("javascripts/angular/1.2.3/angular-cookies.min.js")" type="text/javascript"></script>
+    	<script src="@routes.ResourceManager.getResourse("javascripts/ui-bootstrap-tpls-0.7.0.min.js")" type="text/javascript"></script>
+    	<script src="@routes.ResourceManager.getResourse("javascripts/bootstrap-3.0.3.min.js")" type="text/javascript"></script>
+    	<script src="@routes.ResourceManager.getResourse("javascripts/bootstrap-slider.js")" type="text/javascript"></script>
+    	<script src="@routes.ResourceManager.getResourse("javascripts/my.js")" type="text/javascript"></script>
+        
+    	@moreScripts
     </head>
     <body>
     	<div id="header-wrapper">
@@ -24,7 +28,7 @@
 			<div class="header-menu-wrapper">
 				<div id="pngfix-right"></div>
 				<ul class="menu">
-					<li class="page_item"><a href="/" title="@Messages.get("root.realty")">@Messages.get("root.main")</a></li>
+					<li class="page_item"><a href="/" title="Недвижимость">Главная</a></li>
 					<!-- 					<li class="rent"><a href="/apartments" title="Недвижимость">Недвижимость</a> -->
 					<!-- 						<div class="rent"> -->
 					<!-- 							<ul> -->
@@ -55,20 +59,15 @@
 
 	<div id="content-wrapper">
 		<div id="content-header">
-			@headerContent
+			<div id="logo">
+				<a href="/apartments">Аренда квартир в Севастополе</a>
+				<h1>Посуточная и длительная аренда квартир в Севастополе.</h1>
+			</div>
 		</div>
 		
         @content
         
-		<div id="footer">
-			<ul class="menu">
-				<li><a title="Главная" href="#">Главная</a></li>
-				<li><a title="Правила и условия" href="#">Правила и условия</a></li>
-				<li><a title="Связаться с нами" href="#">Связаться с нами</a></li>
-				<li><a title="Карта сайта" href="#">Карта сайта</a></li>
-			</ul>
-			<p class="c">Копирайт 2013-2014 RandomRent.info © Все права защищены</p>
-		</div>
+		<div id="footer"></div>
 	</div>
 
 	<img alt="" id="ajax-loader" style="display: none; margin-bottom: 0px; margin-left: 5px" src=@routes.ResourceManager.getResourse("/images/ajax-loader.gif") />
