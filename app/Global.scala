@@ -4,19 +4,19 @@ import org.squeryl.adapters.H2Adapter
 import org.squeryl.adapters.MySQLAdapter
 import org.squeryl.adapters.PostgreSqlAdapter
 import org.squeryl.internals.DatabaseAdapter
-
 import play.api.Application
 import play.api.GlobalSettings
 import play.api.Logger
 import play.api.db.DB
 import play.api.mvc.WithFilters
 import play.filters.csrf.CSRFFilter
+import play.api.Play
 
 object Global extends WithFilters(CSRFFilter()) with GlobalSettings {
   private val LOG = Logger(getClass)
 
   override def onStart(app: Application) {
-
+    
     LOG.info("DB session init..")
     var driver = app.configuration.getString("db.default.driver")
     LOG.debug("Mysql driver: " + driver)

@@ -44,4 +44,5 @@ GET       /echo                               controllers.Application.echo
 GET       /todo                               controllers.Application.TODO
 
 # Map static resources from the /public folder to the /assets URL path
-GET       /assets/*file                       controllers.Assets.at(path="/public", file)
+GET       /assets/*file                       controllers.ResourceManager.getResourse(path="/public", file)
+#GET       /assets2/*file                      controllers.Assets.at(path="/public", file)

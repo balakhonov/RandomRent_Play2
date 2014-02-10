@@ -1,6 +1,7 @@
 package controllers
 
-import scala.concurrent.Future
+import java.util.UUID
+
 import controllers.Actions.ApartmentAction
 import controllers.Actions.ApartmentActionBuilder
 import controllers.Actions.JsonAction
@@ -10,21 +11,17 @@ import controllers.Actions.Session
 import controllers.mapping.ApartmentFilters
 import controllers.mapping.ApartmentsP
 import models.Pagination
-import models.Util
 import models.db.dao.ApartmentDao
 import models.db.dao.CityDao
+import models.db.dao.ProvinceDao
 import models.db.mapping.Apartment
 import models.json.formatters.JsonApartmentFormatter
+import models.json.formatters.JsonProvinceFormatter
 import play.api.Logger
 import play.api.libs.json.Json.toJson
 import play.api.mvc.Action
 import play.api.mvc.Controller
 import play.filters.csrf.CSRFCheck
-import models.db.dao.ProvinceDao
-import models.json.formatters.JsonProvinceFormatter
-import javax.imageio.ImageIO
-import java.io.File
-import java.util.UUID
 
 object ApartmentController extends Controller {
   private val LOG = Logger(getClass)
