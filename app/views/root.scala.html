@@ -1,136 +1,164 @@
-@(metaTags: Html , moreScripts: Html, headerContent:Html)(content: Html)(implicit lang:Lang)
+@(metaTags: Html, moreScripts: Html, headerContent: Html)(content: Html)(implicit l: Lang, r: RequestHeader)
 
-@import play.i18n.Messages
+    @url = @{
+        if(l.code.equals("ru")) r.uri else r.uri.substring(3)
+    }
+
+    @lCode = @{
+        if(l.code.equals("ru")) "" else "/" + l.code
+    }
+
+    @availableLang = @{
+        Lang.availables(play.api.Play.current)
+    }
+
+    @displayLangLink(code: String) = @{
+        val link = if(code.equals("ru")) url else "/" + code + url
+
+        makeLangLink(link, code)
+    }
+
+    @makeLangLink(link: String, code: String) = @{
+        if(l.code.equals(code)) {
+            Html("<li>%s</li>".format(code.toUpperCase))
+        } else {
+            Html("<li><a href=\"%s\">%s</a></li>".format(link, code.toUpperCase))
+        }
+    }
 
 <!DOCTYPE html>
+    <html ng-app="project">
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 
-<html ng-app="project">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+            @metaTags
 
-		@metaTags
+            <link rel="stylesheet" href="@routes.ResourceManager.getResource("stylesheets/bootstrap.min.css")"/>
+            <link rel="stylesheet" href="@routes.ResourceManager.getResource("stylesheets/main.css")"/>
+            <link rel="shortcut icon" type="image/png" href="@routes.ResourceManager.getResource("images/favicon.png")"/>
+            <script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-1.9.0.min.js")"></script>
 
-		<link rel="stylesheet" href="@routes.ResourceManager.getResourse("stylesheets/bootstrap.min.css")"/>
-		<link rel="stylesheet" href="@routes.ResourceManager.getResourse("stylesheets/main.css")"/>
-		<link rel="shortcut icon" type="image/png" href="@routes.ResourceManager.getResourse("images/favicon.png")"/>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-1.9.0.min.js")"></script>
-    	
-		@moreScripts
-    </head>
-    <body>
-    	<div id="header-wrapper">
-		<div id="header">
-			<div class="header-menu-wrapper">
-				<div id="pngfix-right"></div>
-				<ul class="menu">
-					<li class="page_item"><a href="/" title="@Messages.get("root.realty")">@Messages.get("root.main")</a></li>
-					<!-- 					<li class="rent"><a href="/apartments" title="Недвижимость">Недвижимость</a> -->
-					<!-- 						<div class="rent"> -->
-					<!-- 							<ul> -->
-					<!-- 								<li><a href="#">Квартиры</a></li> -->
-					<!-- 								<li><a href="#">Комнаты</a></li> -->
-					<!-- 							</ul> -->
-					<!-- 							<ul> -->
-					<!-- 								<li><a href="#">Дома</a></li> -->
-					<!-- 								<li><a href="#">Помещения</a></li> -->
-					<!-- 							</ul> -->
-					<!-- 							<ul> -->
-					<!-- 								<li><a href="#">Гаражи</a></li> -->
-					<!-- 								<li><a href="#">Участки</a></li> -->
-					<!-- 							</ul> -->
-					<!-- 						</div></li> -->
-					<li class="page_item"><a href="/add" title="Подать объявление">Подать объявление</a></li>
-					<li class="page_item"><a href="#" title="Связаться с нами">Связаться с нами</a></li>
-					<li class="page_item reg-b"><a id="sign-up-button" title="Регистрация" href="#">Регистрация</a></li>
-					<li data-lift="LogInForm.loggedOut" class="page_item reg-b"><a id="sign-in-button" title="Войти" href="#">Войти</a></li>
-					<li data-lift="LogInForm.loggedIn" class="page_item reg-b"><a id="account-button" title="Кабинет" href="#">Кабинет</a></li>
-					<li data-lift="LogInForm.loggedIn" class="page_item reg-b"><a class="lift:LogInForm.logOut"
-						id="sign-out-button" title="Выйти" href="#">Выйти</a></li>
-				</ul>
-				<div id="pngfix-left"></div>
-			</div>
-		</div>
-	</div>
+            @moreScripts
+        </head>
+        <body>
+            <div id="header-wrapper">
+                <div id="header">
+                    <div class="header-menu-wrapper">
+                        <ul class="lang">
+                        @for(lg <- availableLang) {
+                            @displayLangLink(lg.code)
+                        }
+                        </ul>
+                        <div id="pngfix-right"></div>
+                        <ul class="menu">
+                            <li class="page_item"><a href="@lCode/" title="@Messages("root.nav.realty")">@Messages("root.nav.main")</a></li>
+                                <!-- 					<li class="rent"><a href="/apartments" title="Недвижимость">Недвижимость</a> -->
+                                <!-- 						<div class="rent"> -->
+                                <!-- 							<ul> -->
+                                <!-- 								<li><a href="#">Квартиры</a></li> -->
+                                <!-- 								<li><a href="#">Комнаты</a></li> -->
+                                <!-- 							</ul> -->
+                                <!-- 							<ul> -->
+                                <!-- 								<li><a href="#">Дома</a></li> -->
+                                <!-- 								<li><a href="#">Помещения</a></li> -->
+                                <!-- 							</ul> -->
+                                <!-- 							<ul> -->
+                                <!-- 								<li><a href="#">Гаражи</a></li> -->
+                                <!-- 								<li><a href="#">Участки</a></li> -->
+                                <!-- 							</ul> -->
+                                <!-- 						</div></li> -->
+                            <li class="page_item"><a href="@lCode @routes.Application.add()" title="Подать объявление">Подать объявление</a></li>
+                            <li class="page_item"><a href="@lCode#" title="Связаться с нами">Связаться с нами</a></li>
+                            <li class="page_item reg-b"><a id="sign-up-button" title="Регистрация" href="#">Регистрация</a></li>
+                            <li data-lift="LogInForm.loggedOut" class="page_item reg-b"><a id="sign-in-button" title="Войти" href="#">Войти</a></li>
+                            <li data-lift="LogInForm.loggedIn" class="page_item reg-b"><a id="account-button" title="Кабинет" href="#">Кабинет</a></li>
+                            <li data-lift="LogInForm.loggedIn" class="page_item reg-b"><a class="lift:LogInForm.logOut"
+                            id="sign-out-button" title="Выйти" href="#">Выйти</a>
+                            </li>
+                        </ul>
+                        <div id="pngfix-left"></div>
+                    </div>
+                </div>
+            </div>
 
-	<div id="content-wrapper">
-		<div id="content-header">
-			@headerContent
-		</div>
-		
-        @content
-        
-		<div id="footer">
-			<ul class="menu">
-				<li><a title="Главная" href="#">Главная</a></li>
-				<li><a title="Правила и условия" href="#">Правила и условия</a></li>
-				<li><a title="Связаться с нами" href="#">Связаться с нами</a></li>
-				<li><a title="Карта сайта" href="#">Карта сайта</a></li>
-			</ul>
-			<p class="c">Копирайт 2013-2014 RandomRent.info © Все права защищены</p>
-		</div>
-	</div>
+            <div id="content-wrapper">
+                <div id="content-header">
+                @headerContent
+                </div>
 
-	<img alt="" id="ajax-loader" style="display: none; margin-bottom: 0px; margin-left: 5px" src=@routes.ResourceManager.getResourse("/images/ajax-loader.gif") />
+                @content
 
+                <div id="footer">
+                    <ul class="menu">
+                        <li><a title="Главная" href="@lCode/">Главная</a></li>
+                        <li><a title="Правила и условия" href="@lCode#">Правила и условия</a></li>
+                        <li><a title="Связаться с нами" href="@lCode#">Связаться с нами</a></li>
+                        <li><a title="Карта сайта" href="@lCode#">Карта сайта</a></li>
+                    </ul>
+                    <p class="c">Копирайт 2013-2014 RandomRent.info © Все права защищены</p>
+                </div>
+            </div>
 
-	<div id="sign-in-dialog" title="Вход в личный кабинет" style="display: none;" data-lift="LogInForm.loggedOut">
-		<div class="sign-in-form">
-			<form class="lift:form.ajax">
-				<div class="lift:LogInForm.logIn?form=post">
-					<table>
-						<tr>
-							<td>E-mail:</td>
-							<td><input name="sign-in-mail-input" type="text" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><span class="lift:Msg?id=sign-in-mail-err;errorClass=error"></span></td>
-						</tr>
-						<tr>
-							<td>Пароль:</td>
-							<td><input name="sign-in-pass-input" type="password" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><span class="lift:Msg?id=sign-in-pass-err;errorClass=error"></span></td>
-						</tr>
-					</table>
-					<input class="button" type="submit" value="Войти" />
-				</div>
-			</form>
-		</div>
-	</div>
+            <img alt="" id="ajax-loader" style="display : none ; margin-bottom : 0 ; margin-left : 5px" src="@routes.ResourceManager.getResource("/images/ajax-loader.gif")" />
 
-	<div id="sign-up-dialog" title="Регистрация в системе" style="display: none;">
-		<div class="sign-up-form">
-			<form class="lift:form.ajax">
-				<div class="lift:RegistrationForm.regForm?form=post">
-					<table>
-						<tr>
-							<td>E-mail:</td>
-							<td><input name="sign-up-mail-input" type="text" value="" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><span class="lift:Msg?id=sign-up-mail-err;errorClass=error"></span></td>
-						</tr>
-						<tr>
-							<td>Пароль:</td>
-							<td><input name="sign-up-pass-input" type="password" value="" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><span class="lift:Msg?id=sign-up-pass-err;errorClass=error"></span></td>
-						</tr>
-						<tr>
-							<td>Еще раз:</td>
-							<td><input name="sign-up-re-pass-input" type="password" value="" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><span class="lift:Msg?id=sign-up-repass-err;errorClass=error"></span></td>
-						</tr>
-					</table>
-					<input class="button" type="submit" value="Регистрация" />
-				</div>
-			</form>
-		</div>
-	</div>
-    </body>
-</html>
+            <div id="sign-in-dialog" title="Вход в личный кабинет" style="display : none ;" data-lift="LogInForm.loggedOut">
+                <div class="sign-in-form">
+                    <form class="lift:form.ajax">
+                        <div class="lift:LogInForm.logIn?form=post">
+                            <table>
+                                <tr>
+                                    <td>E-mail:</td>
+                                    <td><input name="sign-in-mail-input" type="text" /></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><span class="lift:Msg?id=sign-in-mail-err;errorClass=error"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Пароль:</td>
+                                    <td><input name="sign-in-pass-input" type="password" /></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><span class="lift:Msg?id=sign-in-pass-err;errorClass=error"></span></td>
+                                </tr>
+                            </table>
+                            <input class="button" type="submit" value="Войти" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="sign-up-dialog" title="Регистрация в системе" style="display : none ;">
+                <div class="sign-up-form">
+                    <form class="lift:form.ajax">
+                        <div class="lift:RegistrationForm.regForm?form=post">
+                            <table>
+                                <tr>
+                                    <td>E-mail:</td>
+                                    <td><input name="sign-up-mail-input" type="text" value="" /></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><span class="lift:Msg?id=sign-up-mail-err;errorClass=error"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Пароль:</td>
+                                    <td><input name="sign-up-pass-input" type="password" value="" /></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><span class="lift:Msg?id=sign-up-pass-err;errorClass=error"></span></td>
+                                </tr>
+                                <tr>
+                                    <td>Еще раз:</td>
+                                    <td><input name="sign-up-re-pass-input" type="password" value="" /></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><span class="lift:Msg?id=sign-up-repass-err;errorClass=error"></span></td>
+                                </tr>
+                            </table>
+                            <input class="button" type="submit" value="Регистрация" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </body>
+    </html>

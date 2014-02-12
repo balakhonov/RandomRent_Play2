@@ -6,19 +6,20 @@ import play.api.Logger
 import play.api.Play
 import play.api.Play.current
 import play.api.libs.iteratee.Enumerator
-import play.api.mvc.Action
-import play.api.mvc.Controller
+import play.api.mvc._
+import play.utils.UriEncoding
 import play.api.mvc.ResponseHeader
 import play.api.mvc.SimpleResult
-import play.utils.UriEncoding
 
 object ResourceManager extends Controller {
   private val LOG = Logger(getClass)
 
+  def getResource(fileName: String): Action[AnyContent] = getResource("/public", fileName)
+
   /**
    *
    */
-  def getResourse(path: String, fileName: String) = Action {
+  def getResource(path: String, fileName: String): Action[AnyContent] = Action {
     val decodedFile = UriEncoding.decodePath(fileName, "utf-8")
     val absolutePath = path + "/" + decodedFile
     LOG.trace("Try to load: " + absolutePath)

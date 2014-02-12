@@ -1,38 +1,37 @@
-@(provinces:play.api.libs.json.JsValue, request:play.api.mvc.Request[play.api.mvc.AnyContent])(implicit lang:Lang)
-@import play.i18n.Messages
+@(provinces:play.api.libs.json.JsValue, request:Request[AnyContent])(implicit lang:Lang, r: RequestHeader)
 
 @metaTags = {
-		<title>@Messages.get("main.add_appartment.headers.title")</title>
-		<meta name="description" content="@Messages.get("main.add_appartment.headers.description")"/>
-		<meta name="keywords" content="@Messages.get("main.add_appartment.headers.keywords")"/>
+		<title>@Messages("main.add_appartment.headers.title")</title>
+		<meta name="description" content="@Messages("main.add_appartment.headers.description")"/>
+		<meta name="keywords" content="@Messages("main.add_appartment.headers.keywords")"/>
 }
 
 @moreScripts = {
 		<!-- Bootstrap styles -->
-		<link rel="stylesheet" href="@routes.ResourceManager.getResourse("stylesheets/bootstrap-select.min.css")"/>
-        
+		<link rel="stylesheet" href="@routes.ResourceManager.getResource("stylesheets/bootstrap-select.min.css")"/>
+
 		<!-- Google map -->
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-	
+
 		<!-- Angular -->
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/angular/1.2.3/angular.min.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/angular/1.2.3/angular-route.min.js")"></script>    
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/angular/1.2.3/angular-resource.min.js")"></script>
-    	
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/angular/1.2.3/angular.min.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/angular/1.2.3/angular-route.min.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/angular/1.2.3/angular-resource.min.js")"></script>
+
 		<!-- Bootstrap -->
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/bootstrap-3.0.3.min.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/bootstrap-select.min.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/ui-bootstrap-tpls-0.7.0.min.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/bootstrap-3.0.3.min.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/bootstrap-select.min.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/ui-bootstrap-tpls-0.7.0.min.js")"></script>
 
 		<!-- RandomRent -->
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/apartment.js")"></script>
-    
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/apartment.js")"></script>
+
 		<script type="text/javascript">
 		var app = angular.module("project", ['ngResource','ngRoute','ui.bootstrap','ApartmentValidation']);
 		var CREATE_PATH = '@routes.ApartmentController.create()';
 		var PROVINCES = @{play.api.templates.Html(provinces.toString)}
 		</script>
-	
+
 		<script type="text/x-tmpl" id="template-upload">
 		{% for (var i=0, file; file=o.files[i]; i++) { %}
     		<li class="thumb-img-wrap template-upload fade">
@@ -74,20 +73,20 @@
 		    </li>
 		{% } %}
 		</script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-file-uploader/tmpl.min.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-file-uploader/jquery.ui.widget.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-file-uploader/load-image.min.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-file-uploader/jquery.iframe-transport.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-file-uploader/jquery.fileupload.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-file-uploader/jquery.fileupload-process.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-file-uploader/jquery.fileupload-image.js")"></script>
-		<script type="text/javascript" src="@routes.ResourceManager.getResourse("javascripts/jquery-file-uploader/jquery.fileupload-ui.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-file-uploader/tmpl.min.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-file-uploader/jquery.ui.widget.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-file-uploader/load-image.min.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-file-uploader/jquery.iframe-transport.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-file-uploader/jquery.fileupload.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-file-uploader/jquery.fileupload-process.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-file-uploader/jquery.fileupload-image.js")"></script>
+		<script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-file-uploader/jquery.fileupload-ui.js")"></script>
 }
 
 @headerContent ={
 	<div id="logo">
-		<h1>@Messages.get("main.index.logo.h1")</h1>
-		<p>@Messages.get("main.index.logo.p")</p>
+		<h1>@Messages("main.index.logo.h1")</h1>
+		<p>@Messages("main.index.logo.p")</p>
 	</div>
 }
 
@@ -97,14 +96,14 @@
 				<h1 style="color: #bbbbbb; padding: 10px 0 15px 10px;margin-top: 0;">Размещение объявления</h1>
 				<form name="apForm" ng-submit="save()" class="form form-horizontal" style="padding: 0 10px;">
 					<div class="add-apartment-form">
-						<table class="add-apartment-table" cellpadding="0" width="100%" style="background: none;">
+						<table class="add-apartment-table" style="background: none;border-spacing: 0;border-collapse: separate;width:100%;">
 							<tbody>
 								<tr>
 									<td colspan="3"><h4 style="border-bottom: 1px solid #ccc;">Основная информация</h4></td>
 								</tr>
 								<tr>
 									<td style="width: 180px;"><label for="" class="control-label">Рубрика</label></td>
-									<td colspan="2" style="padding-top: 12px;">Длительная аренда квартир<a class="change-rub" href="/add">Сменить рубрику</a>
+									<td colspan="2" style="padding-top: 12px;">Длительная аренда квартир<a class="change-rub" href="@routes.Application.add()">Сменить рубрику</a>
 									<input type="hidden" name="period" value="@request.queryString.get("period")" />
 									</td>
 								</tr>
@@ -115,9 +114,9 @@
 									</td>
 								</tr>
 								<tr ng-class="{error:(!apForm.street.$valid && cityWrapper)}">
-									<td><label for="" class="control-label">Регион<span class="red-star">*</span></label></td>
+									<td><label for="province-select" class="control-label">Регион<span class="red-star">*</span></label></td>
 									<td>
-										<select class="selectpicker" ng-options="i as i.name for i in provinces" ng-model="province"
+										<select id="province-select" class="selectpicker" ng-options="i as i.name for i in provinces" ng-model="province"
 										data-live-search="true" data-width="260px" ng-change="loadCities()">
 											<option value='' disabled selected>Выберите регион</option>
 										</select>
@@ -129,9 +128,9 @@
 									</td>
 								</tr>
 								<tr id="city-list-wrapper" ng-hide="cityWrapper" ng-class="{error:(!apForm.street.$valid && districtWrapper && streetWrapper)}">
-									<td><label for="" class="control-label">Город<span class="red-star">*</span></label></td>
+									<td><label for="city-select" class="control-label">Город<span class="red-star">*</span></label></td>
 									<td colspan="2">
-										<select class="selectpicker" ng-options="i as i.name for i in cities" name="city" ng-model="city" 
+										<select id="city-select" class="selectpicker" ng-options="i as i.name for i in cities" name="city" ng-model="city"
 										data-live-search="true" data-width="260px" ng-change="loadDistricts()">
 											<option value='' disabled selected>Выберите город</option>
 										</select>
@@ -140,8 +139,8 @@
 								<tr id="district-list-wrapper" ng-hide="districtWrapper" ng-class="{error:(!apForm.street.$valid && streetWrapper)}">
 									<td><label for="" class="control-label">Район<span class="red-star">*</span></label></td>
 									<td colspan="2">
-										<select class="selectpicker" ng-options="i.id as i.name for i in districts" name="district" 
-										ng-model="district" ng-change="onDistrictChange()" 
+										<select id="" class="selectpicker" ng-options="i.id as i.name for i in districts" name="district"
+										ng-model="district" ng-change="onDistrictChange()"
 										data-live-search="true" data-width="260px">
 											<option value='' disabled selected>Выберите район</option>
 										</select>
@@ -162,12 +161,12 @@
 									<td colspan="3"></td>
 								</tr>
 							</table>
-								
-						<table class="add-apartment-table" cellpadding="0" style="background: none;width:100%;margin-top: 10px;">
+
+						<table class="add-apartment-table" style="background: none;width:100%;margin-top: 10px;border-spacing: 0;border-collapse: separate;">
 								<tr class="control-group" ng-class="{error:!apForm.title.$valid}">
 									<td style="width: 180px;"><label for="title" class="control-label">Заголовок<span class="red-star">*</span></label></td>
 									<td colspan="2">
-										<input class="form-control" type="text" id="title" name="title" ng-model="title" 
+										<input class="form-control" type="text" id="title" name="title" ng-model="title"
 										 valid-title placeholder="Пример: В центре города 2х комнатная с кондиционером"/>
 										<div class="help-inline">
 							                <span ng-show="!!apForm.title.$error.isBlank">Не должен быть пустым</span>
@@ -176,11 +175,10 @@
 									</td>
 								</tr>
 								<tr class="control-group" ng-class="{error:!apForm.rooms.$valid}">
-									<td><label for="" class="control-label">Комнат<span class="red-star">*</span></label></td>
+									<td><label for="bedroom-select" class="control-label">Комнат<span class="red-star">*</span></label></td>
 									<td colspan="2">
 										<div>
-											<select class="selectpicker" name="rooms" ng-model="rooms" 
-											class="bedroom-select" data-width="105px" valid-rooms>
+											<select id="bedroom-select" class="selectpicker bedroom-select" name="rooms" ng-model="rooms" data-width="105px" valid-rooms>
 												<option value='' disabled selected>Выбрать</option>
 												<option	value="1">1</option>
 												<option value="2">2</option>
@@ -200,7 +198,7 @@
 								<tr class="control-group" ng-class="{error:!apForm.price.$valid}">
 									<td><label for="price" class="control-label">Стоимость(Грн/мес)<span class="red-star">*</span></label></td>
 									<td colspan="2">
-										<input class="form-control" id="price" name="price" ng-model="price" 
+										<input class="form-control" id="price" name="price" ng-model="price"
 										type="text" style="width:105px;" valid-price />
 										<div class="help-inline">
 							                <span ng-show="!!apForm.price.$error.isBlank">Укажите стоимость</span>
@@ -210,9 +208,9 @@
         							</td>
 								</tr>
 								<tr class="control-group" ng-class="{error:!apForm.description.$valid}">
-									<td><label for="" class="control-label">Текст объявления<span class="red-star">*</span></label></td>
+									<td><label for="description-textarea" class="control-label">Текст объявления<span class="red-star">*</span></label></td>
 									<td colspan="2">
-										<textarea class="form-control" name="description" ng-model="description" 
+										<textarea id="description-textarea" class="form-control" name="description" ng-model="description"
 										style="height:200px;" valid-description>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 										</textarea>
 										<div class="help-inline">
@@ -222,7 +220,7 @@
 								</tr>
 								<tr>
 									<td><label for="" class="control-label">Дополнительно</label></td>
-									<td colspan="2"><table class="checkbox" style="border-spacing: 0;background: none;" cellpadding="0" width="100%">
+									<td colspan="2"><table class="checkbox" style="border-spacing: 0;background: none;border-collapse: separate;width:100%;">
 											<tbody>
 												<tr>
 													<td><label for="fu"><input id="fu" type="checkbox" name="fu" ng-model="fu" />С мебелью </label></td>
@@ -252,7 +250,7 @@
 							                    <span>Загрузить</span>
 							                </button>
 											<div style="width: 20em; border: 1pt solid silver; display: none" id="progress">
-												<div style="background: green; height: 1em; width: 0%" id="progress-bar"></div>
+												<div style="background: green; height: 1em; width: 0;" id="progress-bar"></div>
 											</div>
 										<table class="table">
 											<tbody class="files">
@@ -264,30 +262,30 @@
 									<td colspan="3"><h4 style="border-bottom: 1px solid #ccc;">Контактные данные</h4></td>
 								</tr>
 								<tr class="control-group" ng-class="{error:!apForm.mobileNumber.$valid}">
-									<td><label for="" class="control-label">Телефон<span class="red-star">*</span></label></td>
+									<td><label for="mobileNumber-input" class="control-label">Телефон<span class="red-star">*</span></label></td>
 									<td colspan="2">
-										<input class="form-control" name="mobileNumber" ng-model="mobileNumber" 
+										<input id="mobileNumber-input" class="form-control" name="mobileNumber" ng-model="mobileNumber"
 										placeholder="Пример: +38 (xxx) xxx-xx-xx" value="(099) 500-38-23" style="width:270px;"
 										valid-mobile/>
 										<div class="help-inline">
 							                <span ng-show="!!apForm.mobileNumber.$error.isBlank">Не должен быть пустым</span>
 											<span ng-show="!!apForm.mobileNumber.$error.invalidChars">Неверный формат. Пример: Пример: +38 (xxx) xxx-xx-xx</span>
 							                <span ng-show="!!apForm.mobileNumber.$error.invalidLen">Не должен быть длинее 20 символов</span>
-							            </div></td>
-									</td>
+							            </div>
+                                    </td>
 								</tr>
 								<tr class="control-group" ng-class="{error:!apForm.email.$valid}">
 									<td><label for="" class="control-label">E-mail<span class="red-star">*</span></label></td>
 									<td colspan="2">
-										<input class="form-control" name="email" ng-model="email" 
-										placeholder="Пример: balakhonov.yuriy&#64;gmail.com" 
+										<input class="form-control" name="email" ng-model="email"
+										placeholder="Пример: balakhonov.yuriy&#64;gmail.com"
 										value="balakhonov.yuriy&#64;gmail.com" style="width:270px;" valid-email/>
 										<div class="help-inline">
 							                <span ng-show="!!apForm.email.$error.isBlank">Не должен быть пустым</span>
 											<span ng-show="!!apForm.email.$error.invalidChars">Неверный формат e-mail адреса</span>
 							                <span ng-show="!!apForm.email.$error.invalidLen">Не должен быть длинее 40 символов</span>
-							            </div></td>
-									</td>
+							            </div>
+                                    </td>
 								</tr>
 								<tr>
 									<td colspan="3"></td>
@@ -295,22 +293,21 @@
 								<tr>
 									<td colspan="3">
 										<div class="form-actions">
-									        <input type="submit" class="btn btn-primary" value="Опубликовать" 
+									        <input type="submit" class="btn btn-primary" value="Опубликовать"
 									        id="formSubmitBtn"/>
 									    </div>
 	    							</td>
 								</tr>
-							</tbody>
 						</table>
 					</div>
 				</form>
 				<div style="display:none;">
 					@helper.form(action = routes.FileUploadController.upload(), 'enctype -> "multipart/form-data", 'id -> "fileupload") {
-						
+
 						<div class="fileupload-buttonbar">
 							<button id="start-upload" type="submit" class="start">Start</button>
 							<input id="choose-photos" multiple type="file" name="picture" class="fileinput-button"/>
-							
+
 						</div>
 					}
 				</div>

@@ -8,9 +8,8 @@ import play.api.Application
 import play.api.GlobalSettings
 import play.api.Logger
 import play.api.db.DB
-import play.api.mvc.WithFilters
+import play.api.mvc.{RequestHeader, Handler, WithFilters}
 import play.filters.csrf.CSRFFilter
-import play.api.Play
 
 object Global extends WithFilters(CSRFFilter()) with GlobalSettings {
   private val LOG = Logger(getClass)
@@ -18,7 +17,7 @@ object Global extends WithFilters(CSRFFilter()) with GlobalSettings {
   override def onStart(app: Application) {
     
     LOG.info("DB session init..")
-    var driver = app.configuration.getString("db.default.driver")
+    val driver = app.configuration.getString("db.default.driver")
     LOG.debug("Mysql driver: " + driver)
     SessionFactory.concreteFactory = driver match {
       case Some("com.mysql.jdbc.Driver") => Some(() => getSession(new MySQLAdapter, app))
@@ -38,6 +37,31 @@ object Global extends WithFilters(CSRFFilter()) with GlobalSettings {
     //    }
   }
 
+  override def onRouteRequest(request: RequestHeader): Option[Handler] = {
+    super.onRouteRequest(new NormalizedRequest(request))
+  }
+
   def getSession(adapter: DatabaseAdapter, app: Application) = Session.create(DB.getConnection()(app), adapter)
 
+  /**
+   *
+   * @param request:RequestHeader
+   */
+  class NormalizedRequest(request: RequestHeader) extends RequestHeader {
+
+    override val headers = request.headers
+    override val queryString = request.queryString
+    override val remoteAddress = request.remoteAddress
+    override val method = request.method
+
+    override val path = if(!request.path.equals("/")) request.path.stripSuffix("/") else request.path
+    override  val uri = path + {
+      if(request.rawQueryString == "") ""
+      else "?" + request.rawQueryString
+    }
+
+    override def id: Long = request.id
+    override def tags: Map[String, String] = request.tags
+    override def version: String = request.version
+  }
 }

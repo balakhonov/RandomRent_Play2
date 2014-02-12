@@ -26,9 +26,11 @@ import play.api.mvc.WrappedRequest
 object Actions extends Results {
   private val LOG = Logger(getClass)
 
-  protected case class RequestWithApartment[A](val apartment: Apartment, request: Request[A]) extends WrappedRequest[A](request)
-  protected case class RequestWithCity[A](val city: City, request: Request[A]) extends WrappedRequest[A](request)
-  protected case class RequestWithItem[A](val item: A, request: Request[JsValue])
+  protected case class RequestWithApartment[A](apartment: Apartment, request: Request[A]) extends WrappedRequest[A](request)
+
+  protected case class RequestWithCity[A](city: City, request: Request[A]) extends WrappedRequest[A](request)
+
+  protected case class RequestWithItem[A](item: A, request: Request[JsValue])
 
   object JsonAction {
     def apply[I](formatter: Reads[I])(block: RequestWithItem[I] => Result) = {
@@ -37,16 +39,17 @@ object Actions extends Results {
   }
 
   private def fromJson[I](block: RequestWithItem[I] => Result, request: Request[JsValue], formatter: Reads[I]): Result = {
-    var json: JsValue = request.body
-    var jsResult = Json.fromJson[I](json)(formatter)
-    var item = jsResult.get
+    val json: JsValue = request.body
+    val jsResult = Json.fromJson[I](json)(formatter)
+    val item = jsResult.get
     block(new RequestWithItem[I](item, request))
   }
 
   case class Session[A](action: Action[A]) extends Action[A] {
     def apply(request: Request[A]): Future[SimpleResult] = {
-      request.session.get(Util.USER_ID).map { user =>
-        action(request)
+      request.session.get(Util.USER_ID).map {
+        user =>
+          action(request)
       }.getOrElse {
         Future.successful(Unauthorized("You are not authorized!"))
       }
@@ -60,19 +63,19 @@ object Actions extends Results {
     lazy val parser = p
 
     def apply(request: Request[A]): Future[SimpleResult] = {
-      var ap = ApartmentDao.get(id)
-      var act = action(ap)
+      val ap = ApartmentDao.get(id)
+      val act = action(ap)
       act(request)
     }
   }
 
   object ApartmentActionBuilder {
-    def apply(id: Int) = {
+    def apply(id: Int):ActionBuilder[RequestWithApartment] = {
       new ApartmentActionBuilder(id)
     }
 
     class ApartmentActionBuilder(id: Int) extends ActionBuilder[RequestWithApartment] {
-      def invokeBlock[A](request: Request[A], block: (RequestWithApartment[A]) => Future[SimpleResult]) = {
+      override def invokeBlock[A](request: Request[A], block: (RequestWithApartment[A]) => Future[SimpleResult]) = {
         block(new RequestWithApartment(ApartmentDao.get(id), request))
       }
     }
@@ -100,10 +103,12 @@ object Actions extends Results {
 
   case class Logging[A](action: Action[A]) extends Action[A] {
     def apply(r: Request[A]): Future[SimpleResult] = {
-      LOG.debug("[%s] %s %s [session:%s] %nparameters:{%s}"
+      LOG.debug("[%s] %s %s [session:%s] %n parameters:{%s}"
         .format(r.remoteAddress, r.method, URLDecoder.decode(r.path, "UTF-8"), r.session.get(Util.USER_ID), r.queryString))
       action(r)
     }
+
     lazy val parser = action.parser
   }
+
 }
