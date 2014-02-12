@@ -38,6 +38,9 @@
             <link rel="stylesheet" href="@routes.ResourceManager.getResource("stylesheets/main.css")"/>
             <link rel="shortcut icon" type="image/png" href="@routes.ResourceManager.getResource("images/favicon.png")"/>
             <script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-1.9.0.min.js")"></script>
+            <script type="text/javascript">
+                var LANG_PREFIX = "@lCode";
+            </script>
 
             @moreScripts
         </head>
@@ -68,7 +71,7 @@
                                 <!-- 								<li><a href="#">Участки</a></li> -->
                                 <!-- 							</ul> -->
                                 <!-- 						</div></li> -->
-                            <li class="page_item"><a href="@lCode @routes.Application.add()" title="Подать объявление">Подать объявление</a></li>
+                            <li class="page_item"><a href="@lCode@routes.Application.add()" title="Подать объявление">Подать объявление</a></li>
                             <li class="page_item"><a href="@lCode#" title="Связаться с нами">Связаться с нами</a></li>
                             <li class="page_item reg-b"><a id="sign-up-button" title="Регистрация" href="#">Регистрация</a></li>
                             <li data-lift="LogInForm.loggedOut" class="page_item reg-b"><a id="sign-in-button" title="Войти" href="#">Войти</a></li>

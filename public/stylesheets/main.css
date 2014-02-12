@@ -62,6 +62,13 @@ label {
     font-weight: bold;
 }
 
+table {
+    background: none;
+    border-spacing: 0;
+    border-collapse: separate;
+    width: 100%;
+}
+
 table.checkbox td {
     padding-right: 30px !important;
 }
@@ -1355,4 +1362,8 @@ a.centre-25-link {
     padding: 3px 5px 4px;
     margin: 0 3px 0 0;
     background: none;
+}
+
+#add-ad .c-left {
+    padding-bottom: 30px;
 }

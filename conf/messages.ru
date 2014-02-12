@@ -9,3 +9,11 @@ main.index.logo.p=Посуточная и длительная аренда кв
 
 root.nav.main=Главная
 root.nav.realty=Недвижимость
+
+add-ad.logo.h1=Подать бесплатное объявление
+add-ad.logo.p=Выбирете рубрику для подачи объявления на RandomRent.info
+add-ad.type.want=Сниму
+add-ad.type.offer=Сдам
+add-ad.period.long=Длительно
+add-ad.period.day=Посуточно
+add-ad.object.flat=Квартира

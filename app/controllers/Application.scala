@@ -24,7 +24,9 @@ object Application extends Controller {
       implicit val lang = new Lang(i18n)
 
       val group = CityDao.getAll().groupBy(_.provinceId)
-      val filteredCities = group.map{ entry => (entry._1,entry._2.map(_.name))}
+      val filteredCities = group.map {
+        entry => (entry._1, entry._2.map(_.name))
+      }
 
       Ok(views.html.index(filteredCities))
   }
@@ -36,14 +38,15 @@ object Application extends Controller {
 
   /**
    *
-   * @param i18n
+   * @param i18n:String
    * @return
    */
   def addI18n(i18n: String = "ru") = {
     Logging {
       Action {
-        implicit val lang = new Lang(i18n)
-        Ok(views.html.user.add())
+        implicit request =>
+          implicit val lang = new Lang(i18n)
+          Ok(views.html.user.add())
       }
     }
   }

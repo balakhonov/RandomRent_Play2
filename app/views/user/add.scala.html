@@ -1,94 +1,43 @@
-@()
+@()(implicit l:Lang,r:RequestHeader)
 
-@moreScripts = {
-}
+    @metaTags = {
+        <title>@Messages("main.index.headers.title")</title>
+        <meta name="description" content="@Messages("main.index.headers.description") - RandomRent.info"/>
+        <meta name="keywords" content="@Messages("main.index.headers.keywords")"/>
+    }
 
-@main("Welcome to Play 2.1", moreScripts) {
-<div id="body">
-	<table style="border-spacing: 0;" cellpadding="0" width="100%">
+    @moreScripts = {
+        <script src="@routes.ResourceManager.getResource("javascripts/add-ad.js")" type="text/javascript"></script>
+    }
+
+    @headerContent = {
+        <div id="logo">
+            <h1>@Messages("add-ad.logo.h1")</h1>
+            <p>@Messages("add-ad.logo.p")</p>
+        </div>
+    }
+
+@root(metaTags, moreScripts,headerContent) {
+<div id="add-ad">
+	<table>
 		<tbody>
 			<tr>
-				<td style="padding-bottom: 30px;" class="c-left">
-					<h1 style="color: #bbbbbb; padding: 10px 0 15px 10px;">Выбирете рубрику для подачи объявления в Севастополе:</h1>
+				<td class="c-left">
 					<ul class="rent-filter">
-						<li class=""><a class="button flt rent-offer arr" href="#">Сдам</a></li>
+						<li><a class="button flt rent-offer arr" href="#">@Messages("add-ad.type.offer")</a></li>
+                        @*<li><a class="button flt rent-want arr" href="#">@Messages("add-ad.type.want")</a></li>*@
 					</ul>
 					<ul class="rent-filter2">
-						<li class=""><a class="button flt lt arr" href="#">Длительно</a></li>
-						<li class=""><a class="button flt st arr" href="#">Посуточно</a></li>
+						<li class=""><a class="button flt lt arr" href="#">@Messages("add-ad.period.long")</a></li>
+						<li class=""><a class="button flt st arr" href="#">@Messages("add-ad.period.day")</a></li>
 					</ul>
 					<ul class="rent-filter3">
-						<li class=""><a class="button flt" href="#" id="ro-1">Кваритру</a></li>
+						<li class=""><a class="button flt" href="#" id="ro-1">@Messages("add-ad.object.flat")</a></li>
 					</ul>
 				</td>
 				<td class="c-right"></td>
 			</tr>
 		</tbody>
 	</table>
-	<script>
-		var type = 0;
-		var period = 0;
-
-		$(".rent-filter a").click(function() {
-			$(".rent-filter a").removeClass("selected");
-			$(".rent-filter2 a").removeClass("selected");
-			$(this).addClass("selected");
-
-			$(".rent-filter2").hide();
-			$(".rent-filter3").hide();
-		});
-		$(".rent-filter .rent-want").click(function() {
-			type = 1;
-			$(".rent-filter2").show();
-		});
-		$(".rent-filter .rent-offer").click(function() {
-			type = 2;
-			$(".rent-filter2").show();
-		});
-		$(".rent-filter .rent-buy").click(function() {
-			type = 3;
-			showResult(type);
-		});
-		$(".rent-filter .rent-sell").click(function() {
-			type = 4;
-			showResult(type);
-		});
-
-		$(".rent-filter2 a").click(function() {
-			$(".rent-filter2 a").removeClass("selected");
-			$(this).addClass("selected");
-		});
-		$(".rent-filter2 .lt").click(function() {
-			period = 1;
-			showResult(type, period);
-		});
-		$(".rent-filter2 .st").click(function() {
-			period = 2;
-			showResult(type, period);
-		});
-
-		function showResult(type, period) {
-			$(".rent-filter3").show();
-
-			if (type == 1 || type == 2) {
-				var param = "?type=" + type + "&period=" + period + "&cid=1";
-
-				$("#ro-1").attr("href", "/add-apartment" + param);
-				$("#ro-2").attr("href", "/add-room" + param);
-				$("#ro-3").attr("href", "/add-house" + param);
-				$("#ro-4").attr("href", "/add-garage" + param);
-				$("#ro-5").attr("href", "/add-com-place" + param);
-				$("#ro-6").attr("href", "/add-stead" + param);
-				$("#ro-6").hide();
-			} else {
-				$("#ro-1").attr("href", "/add-apartment?type=" + type);
-				$("#ro-2").attr("href", "/add-room?type=" + type);
-				$("#ro-3").attr("href", "/add-house?type=" + type);
-				$("#ro-4").attr("href", "/add-garage?type=" + type);
-				$("#ro-5").attr("href", "/add-com-place?type=" + type);
-				$("#ro-6").attr("href", "/add-stead?type=" + type);
-			}
-		}
-	</script>
 </div>
 }
