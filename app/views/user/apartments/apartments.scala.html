@@ -1,60 +1,86 @@
-@(apartments:List[db.mapping.Apartment],
-	currentPage:Int,
-	totalPages:Int,
-	pagination:scala.xml.NodeSeq,
-	apFilters:controllers.mapping.ApartmentFilters)(implicit request: 
- play.api.mvc.Request[play.api.mvc.AnyContent])
+@(city: models.db.mapping.City,
+        apartments: List[db.mapping.Apartment],
+        currentPage: Int,
+        totalPages: Int,
+        pagination: scala.xml.NodeSeq,
+        apFilters: controllers.mapping.ApartmentFilters)(implicit l: Lang, request: Request[AnyContent])
 
-@moreScripts = {
-    <script src="@routes.ResourceManager.getResource("javascripts/purl.js")" type="text/javascript"></script>
-    <script>
-    var app = angular.module("project", ['ngResource','ngRoute','ui.bootstrap','ngCookies']);
-    </script>
-}
+    @province = @{
+        models.db.dao.ProvinceDao.get(city.provinceId)
+    }
 
-@main("Welcome to Play 2.1", moreScripts) {
-<div id="content">
-	<table class="cont-table">
-		<tbody>
-			<tr>
-				<td class="c-left">
-					<ul class="breadcrumb" style="margin-bottom: 5px;">
-                		<li><a href="#">Главная</a></li>
-                		<li><a href="#">АР Крым</a></li>
-                		<li class="active">Севастополь</li>
-              		</ul>
-              		@if(apartments.isEmpty){
-              			@notFound("Ничего не найдено")
-              		}else{
-						<div class="table-rows-count-info">Показано @currentPage из @totalPages</div>
-						<table cellpadding="0" width="100%" class="res-table display" id="result-table">
-							<thead>
-								<tr role="row">
-									<th></th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-							<tr>
-								<td>
-								@for(ap <- apartments) {
-									@big_ap_block(ap)
-								}
-								</td>
-							</tr>
-							</tbody>
-						</table>
-	
-						<ul class="pagination">
-							@pagination
-						</ul>
-					}
-				</td>
-				<td class="c-right" ng-controller="FiltersCtrl">
-					<h3>Подбор по параметрам</h3>
-					@filters(apFilters)
-			</tr>
-		</tbody>
-	</table>
-</div>
-}
+    @lPrefix = @{
+        if(l.language.equals("ru")) "" else "/" + l.language
+    }
+
+    @metaTags = {
+        <title>@Messages("main.index.headers.title")</title>
+        <meta name="description" content="@Messages("main.index.headers.description") - RandomRent.info"/>
+        <meta name="keywords" content="@Messages("main.index.headers.keywords")"/>
+    }
+
+    @moreScripts = {
+        <link rel="stylesheet" href="@routes.ResourceManager.getResource("stylesheets/bootstrap-slider.css")"/>
+
+        <script src="@routes.ResourceManager.getResource("javascripts/angular/1.2.3/angular.min.js")" type="text/javascript"></script>
+        <script src="@routes.ResourceManager.getResource("javascripts/angular/1.2.3/angular-route.min.js")" type="text/javascript"></script>
+        <script src="@routes.ResourceManager.getResource("javascripts/angular/1.2.3/angular-resource.min.js")" type="text/javascript"></script>
+        <script src="@routes.ResourceManager.getResource("javascripts/angular/1.2.3/angular-cookies.min.js")" type="text/javascript"></script>
+        <script src="@routes.ResourceManager.getResource("javascripts/ui-bootstrap-tpls-0.7.0.min.js")" type="text/javascript"></script>
+        <script src="@routes.ResourceManager.getResource("javascripts/bootstrap-3.0.3.min.js")" type="text/javascript"></script>
+        <script src="@routes.ResourceManager.getResource("javascripts/bootstrap-slider.js")" type="text/javascript"></script>
+        <script src="@routes.ResourceManager.getResource("javascripts/my.js")" type="text/javascript"></script>
+
+        <script src="@routes.ResourceManager.getResource("javascripts/purl.js")" type="text/javascript"></script>
+        <script>
+        var app = angular.module ( "project", [ 'ngResource', 'ngRoute', 'ui.bootstrap', 'ngCookies' ] ) ;
+        </script>
+    }
+
+    @headerContent = {
+        <div id="logo">
+            <h1>@Messages("main.index.logo.h1")</h1>
+            <p>@Messages("main.index.logo.p")</p>
+        </div>
+    }
+
+    @root(metaTags, moreScripts, headerContent) {
+        <div id="content">
+            <table class="cont-table">
+                <tbody>
+                    <tr>
+                        <td class="c-left">
+                            <ul class="breadcrumb" style="margin-bottom : 5px ;">
+                                <li><a href="#">@Messages("root.nav.main")</a></li>
+                                <li><a href="#">@province.name</a></li>
+                                <li class="active">@city.name</li>
+                            </ul>
+                            @if(apartments.isEmpty) {
+                                @user.apartments.not_found("Ничего не найдено")
+                            } else {
+                                <div class="table-rows-count-info">Показано @currentPage из @totalPages</div>
+                                <table class="res-table display" id="result-table">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                            @for(ap <- apartments) {
+                                                @user.apartments.big_ap_block(ap)
+                                            }
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <ul class="pagination">
+                                @pagination
+                                </ul>
+                            }
+                        </td>
+                        <td class="c-right" ng-controller="FiltersCtrl">
+                            <h3>Подбор по параметрам</h3>
+                            @user.apartments.filters(apFilters)
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }

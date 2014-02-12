@@ -1,7 +1,8 @@
 function FiltersCtrl($scope, $cookies, $cookieStore) {
 	var url = $.url();
+    var additionFiltersBlock = $("#addition-filter-fs");
 
-	$("#addition-filter-fs input[type=checkbox]").each(function(i, elem) {
+    additionFiltersBlock.find("input[type=checkbox]").each(function(i, elem) {
 		$(elem).on("change", function() {
 			var checked = $(this).is(":checked");
 			var name = $(this).attr("data-name");
@@ -13,18 +14,17 @@ function FiltersCtrl($scope, $cookies, $cookieStore) {
 			}
 		});
 	});
-	$("#addition-filter-fs button").on("click", function() {
-		var path = url.attr('path')
+    additionFiltersBlock.find("button").on("click", function() {
+		var path = url.attr('path');
 		var str = jQuery.param(url.data.param.query);
 		window.location = path + "?" + str;
 	});
 
-	$("#addition-filter-fs-bt").showFilterPanel($("#addition-filter-fs"));
+	$("#addition-filter-fs-bt").showFilterPanel(additionFiltersBlock);
 }
 
 $.fn.extend({
 	showFilterPanel : function(content, options, callback) {
-		var that = this;
 		var lock = true;
 		var elem = $('<div class="filter-panel"></div>').hide();
 		elem.addClass("popup-info ui-corner-all ui-widget-content ui-dialog");
@@ -45,7 +45,7 @@ $.fn.extend({
 			callback();
 		});
 
-		$(this).click(function(e, el) {
+		$(this).click(function() {
 			lock = null;
 
 			elem.append(content.show());

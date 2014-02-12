@@ -1,11 +1,11 @@
 @(metaTags: Html, moreScripts: Html, headerContent: Html)(content: Html)(implicit l: Lang, r: RequestHeader)
 
     @url = @{
-        if(l.code.equals("ru")) r.uri else r.uri.substring(3)
+        if(l.language.equals("ru")) r.uri else r.uri.substring(3)
     }
 
     @lCode = @{
-        if(l.code.equals("ru")) "" else "/" + l.code
+        if(l.language.equals("ru")) "" else "/" + l.language
     }
 
     @availableLang = @{
@@ -18,11 +18,11 @@
         makeLangLink(link, code)
     }
 
-    @makeLangLink(link: String, code: String) = @{
-        if(l.code.equals(code)) {
-            Html("<li>%s</li>".format(code.toUpperCase))
+    @makeLangLink(link: String, language: String) = @{
+        if(l.language.equals(language)) {
+            Html("<li>%s</li>".format(language.toUpperCase))
         } else {
-            Html("<li><a href=\"%s\">%s</a></li>".format(link, code.toUpperCase))
+            Html("<li><a href=\"%s\">%s</a></li>".format(link, language.toUpperCase))
         }
     }
 

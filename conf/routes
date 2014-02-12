@@ -11,7 +11,7 @@ GET            /add                                     controllers.Application.
 GET            /$lang<[a-z]{2}>/add                     controllers.Application.addI18n(lang)
 
 # Apartment
-GET            /update-apartment/:id                    controllers.ApartmentController.get(id:Int)
+GET            /apartment/:id                           controllers.ApartmentController.get(id:Long)
 GET            /add-apartment                           controllers.ApartmentController.addApartment()
 POST           /apartment                               controllers.ApartmentController.create(archived:Boolean=true,moderated:Boolean=true)
 PUT            /apartment/:id                           controllers.ApartmentController.update(id:Int)

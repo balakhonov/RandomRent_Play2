@@ -1,7 +1,5 @@
 package models.db.mapping
 
-import org.squeryl.KeyedEntity
-
 class Apartment(
   var cityId: Long,
   var street: String,
@@ -34,7 +32,7 @@ class Apartment(
 
   def this() = this(0, "", 0, 0, 0, 0, 0, "", "", "", "", 0, false, false, false, false, false, false, false, false, false, 0, false, false, 0, 0)
 
-  override def toString() = {
+  override def toString = {
     "id = " + id + "street:" + street
   }
 }

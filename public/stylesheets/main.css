@@ -314,6 +314,7 @@ table.checkbox td {
     vertical-align: top;
     margin: 0;
     padding: 0;
+    width: 210px;
 }
 
 .ap-info .right {
@@ -357,11 +358,13 @@ table.checkbox td {
 
 .apartments-list .ap-info .right .amenities ul {
     display: inline-block !important;
-    width: 142px !important;
+    width: 250px !important;
     vertical-align: top;
 }
 
 .apartments-list .ap-info .right .amenities ul li {
+    float: left;
+    width: 50%;
     font-size: 12px !important;
 }
 
@@ -375,6 +378,10 @@ table.checkbox td {
     -moz-border-radius-bottomleft: 3px;
     border-bottom-right-radius: 3px;
     border-bottom-left-radius: 3px;
+}
+
+.ap-info .left .img-wrap img {
+    width:200px;
 }
 
 .ap-info-contant {

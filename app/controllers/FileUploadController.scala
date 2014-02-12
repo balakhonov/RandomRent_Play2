@@ -4,19 +4,14 @@ import javax.imageio.ImageIO
 import java.io.File
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
-import models.db.mapping.ApartmentImage
-import models.db.dao.ApartmentImageDao
 import java.security.MessageDigest
 import play.filters.csrf.CSRFCheck
 import play.api.mvc.Controller
 import play.api.Logger
-import controllers.Actions.Session
-import controllers.Actions.LoggingAction
 import java.util.Date
 import java.io.InputStream
 import java.awt.Color
 import java.awt.AlphaComposite
-import play.api.mvc.MultipartFormData.FilePart
 import play.api.libs.Files.TemporaryFile
 import play.api.libs.json.Json.toJson
 import java.text.SimpleDateFormat
@@ -25,10 +20,8 @@ import java.util.concurrent.ConcurrentHashMap
 import java.io.FileInputStream
 import play.api.mvc.Action
 import play.api.mvc.Request
-import play.api.mvc.SimpleResult
 import play.api.mvc.MultipartFormData
 import play.api.mvc.AnyContent
-import play.api.mvc.AnyContentAsMultipartFormData
 
 object FileUploadController extends Controller {
   private val LOG = Logger(getClass)
@@ -45,9 +38,9 @@ object FileUploadController extends Controller {
   val ROOT_IMAGES_DIR = "/home/yuri/RandomRent/images/"
 
   // Try to make directories if not exists
-  val dir = new File(ROOT_IMAGES_DIR);
+  val dir = new File(ROOT_IMAGES_DIR)
   if (!dir.exists()) {
-    dir.mkdirs();
+    dir.mkdirs()
   }
 
   /**
@@ -182,11 +175,11 @@ object FileUploadController extends Controller {
           }
 
           // move file to tmp dir
-          var file = new File(getTmpDirPath() + newFileName)
+          val file = new File(getTmpDirPath() + newFileName)
           picture.ref.moveTo(file, true)
 
           //convert
-          var fileInputStream = new FileInputStream(file);
+          val fileInputStream = new FileInputStream(file);
           val data = Stream.continually(fileInputStream.read).takeWhile(-1 !=).map(_.toByte).toArray
           convertImage(data, contentType, newFileName, getTmpDirPath())
 

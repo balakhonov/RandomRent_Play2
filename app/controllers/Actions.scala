@@ -70,11 +70,11 @@ object Actions extends Results {
   }
 
   object ApartmentActionBuilder {
-    def apply(id: Int):ActionBuilder[RequestWithApartment] = {
+    def apply(id: Long):ActionBuilder[RequestWithApartment] = {
       new ApartmentActionBuilder(id)
     }
 
-    class ApartmentActionBuilder(id: Int) extends ActionBuilder[RequestWithApartment] {
+    class ApartmentActionBuilder(id: Long) extends ActionBuilder[RequestWithApartment] {
       override def invokeBlock[A](request: Request[A], block: (RequestWithApartment[A]) => Future[SimpleResult]) = {
         block(new RequestWithApartment(ApartmentDao.get(id), request))
       }

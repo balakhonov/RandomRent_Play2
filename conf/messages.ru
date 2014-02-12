@@ -52,3 +52,6 @@ add-ad.type.offer=Сдам
 add-ad.period.long=Длительно
 add-ad.period.day=Посуточно
 add-ad.object.flat=Квартира
+
+aprs.district={0} р-н
+aprs.street=ул. {0}

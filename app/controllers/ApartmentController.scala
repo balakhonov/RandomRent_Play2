@@ -5,10 +5,8 @@ import controllers.Actions._
 import controllers.mapping.ApartmentFilters
 import controllers.mapping.ApartmentsP
 import models.Pagination
-import models.db.dao.ApartmentDao
-import models.db.dao.CityDao
-import models.db.dao.ProvinceDao
-import models.db.mapping.Apartment
+import models.db.dao.{ApartmentImageDao, ApartmentDao, CityDao, ProvinceDao}
+import models.db.mapping.{ApartmentImage, Apartment}
 import models.json.formatters.JsonApartmentFormatter
 import models.json.formatters.JsonProvinceFormatter
 import play.api.Logger
@@ -41,10 +39,11 @@ object ApartmentController extends Controller {
   /**
    *
    */
-  def get(id: Int) = {
+  def get(id: Long) = {
     Logging {
       ApartmentActionBuilder(id)(
         request => {
+          LOG.info("get apartment: " + id)
           Ok(views.html.user.apartments.apartment(request.apartment))
         }
       )
@@ -78,20 +77,33 @@ object ApartmentController extends Controller {
   /**
    *
    */
-  def create(archived: Boolean, moderated: Boolean) = CSRFCheck {
-    Session {
-      JsonAction[Apartment](JsonApartmentFormatter) {
-        implicit request => {
-          val apartment = request.item
+  def create(archived: Boolean, moderated: Boolean) = /*CSRFCheck {*/
+  //    Session {
+    JsonAction[Apartment](JsonApartmentFormatter) {
+      implicit request => {
+        val apartment = request.item
 
-          // TODO validate
+        // TODO validate
 
-          ApartmentDao.save(apartment)
-          Ok(toJson(apartment))
+        // TODO make all in one transaction
+        ApartmentDao.save(apartment)
+
+        request.request.session.get("uuid").map {
+          uuid =>
+            val images = FileUploadController.IMAGES_MAP.get(uuid)
+            if (images != null) {
+              for (fileName <- images) {
+                ApartmentImageDao.save(new ApartmentImage(fileName,apartment.id))
+              }
+            }
+        }.getOrElse {
+          throw new IllegalStateException("User haven't uuid")
         }
+        Ok(toJson(apartment))
       }
+      //      }
+      /*}*/
     }
-  }
 
   /**
    *
@@ -125,10 +137,11 @@ object ApartmentController extends Controller {
 
   def show(cityName: String, page: Int) = showI18n("ru", cityName, page)
 
-  def showI18n(lang: String, cityName: String, page: Int) =
+  def showI18n(i18n: String, cityName: String, page: Int) =
     Logging {
       Action {
         implicit request => {
+          implicit val lang = Lang(i18n)
           val city = CityDao.getCity(UA_ID, cityName)
           val offset = ITEMS_PER_PAGE * (page - 1)
 
@@ -145,7 +158,7 @@ object ApartmentController extends Controller {
             render {
               case Accepts.Html() =>
                 val pagination = Pagination.getPagination(page, totalPages, VISIBLE_BUTTONS_COUNT)
-                Ok(views.html.user.apartments.apartments(apartments, page, totalPages, pagination, new ApartmentFilters(ap)))
+                Ok(views.html.user.apartments.apartments(city, apartments, page, totalPages, pagination, new ApartmentFilters(ap)))
               case Accepts.Json() =>
                 val jsonList = toJson(apartments.map(toJson(_)))
                 Ok(jsonList)
