@@ -39,7 +39,7 @@
             <link rel="shortcut icon" type="image/png" href="@routes.ResourceManager.getResource("images/favicon.png")"/>
             <script type="text/javascript" src="@routes.ResourceManager.getResource("javascripts/jquery-1.9.0.min.js")"></script>
             <script type="text/javascript">
-                var LANG_PREFIX = "@lCode";
+            var LANG_PREFIX = "@lCode";
             </script>
 
             @moreScripts
@@ -56,35 +56,17 @@
                         <div id="pngfix-right"></div>
                         <ul class="menu">
                             <li class="page_item"><a href="@lCode/" title="@Messages("root.nav.realty")">@Messages("root.nav.main")</a></li>
-                                <!-- 					<li class="rent"><a href="/apartments" title="Недвижимость">Недвижимость</a> -->
-                                <!-- 						<div class="rent"> -->
-                                <!-- 							<ul> -->
-                                <!-- 								<li><a href="#">Квартиры</a></li> -->
-                                <!-- 								<li><a href="#">Комнаты</a></li> -->
-                                <!-- 							</ul> -->
-                                <!-- 							<ul> -->
-                                <!-- 								<li><a href="#">Дома</a></li> -->
-                                <!-- 								<li><a href="#">Помещения</a></li> -->
-                                <!-- 							</ul> -->
-                                <!-- 							<ul> -->
-                                <!-- 								<li><a href="#">Гаражи</a></li> -->
-                                <!-- 								<li><a href="#">Участки</a></li> -->
-                                <!-- 							</ul> -->
-                                <!-- 						</div></li> -->
-                            <li class="page_item"><a href="@lCode@routes.Application.add()" title="Подать объявление">Подать объявление</a></li>
-                            <li class="page_item"><a href="@lCode#" title="Связаться с нами">Связаться с нами</a></li>
-                            <li class="page_item reg-b"><a id="sign-up-button" title="Регистрация" href="#">Регистрация</a></li>
-                            <li data-lift="LogInForm.loggedOut" class="page_item reg-b"><a id="sign-in-button" title="Войти" href="#">Войти</a></li>
-                            <li data-lift="LogInForm.loggedIn" class="page_item reg-b"><a id="account-button" title="Кабинет" href="#">Кабинет</a></li>
-                            <li data-lift="LogInForm.loggedIn" class="page_item reg-b"><a class="lift:LogInForm.logOut"
-                            id="sign-out-button" title="Выйти" href="#">Выйти</a>
-                            </li>
+                            <li class="page_item"><a href="@lCode @routes.Application.add()" title="@Messages("root.nav.add")">@Messages("root.nav.add")</a></li>
+                            <li class="page_item"><a href="@lCode#" title="@Messages("root.nav.feedback")">@Messages("root.nav.feedback")</a></li>
+                            <li class="page_item"><a href="@lCode#" title="@Messages("root.nav.sign_up")">@Messages("root.nav.sign_up")</a></li>
+                            <li class="page_item"><a href="@lCode#" title="@Messages("root.nav.sign_in")">@Messages("root.nav.sign_in")</a></li>
+                            <li class="page_item"><a href="@lCode#" title="@Messages("root.nav.profile")">@Messages("root.nav.profile")</a></li>
+                            <li class="page_item"><a href="@lCode#" title="@Messages("root.nav.log_out")">@Messages("root.nav.log_out")</a></li>
                         </ul>
                         <div id="pngfix-left"></div>
                     </div>
                 </div>
             </div>
-
             <div id="content-wrapper">
                 <div id="content-header">
                 @headerContent
@@ -94,73 +76,12 @@
 
                 <div id="footer">
                     <ul class="menu">
-                        <li><a title="Главная" href="@lCode/">Главная</a></li>
-                        <li><a title="Правила и условия" href="@lCode#">Правила и условия</a></li>
-                        <li><a title="Связаться с нами" href="@lCode#">Связаться с нами</a></li>
-                        <li><a title="Карта сайта" href="@lCode#">Карта сайта</a></li>
+                        <li><a title="@Messages("root.nav.main")" href="@lCode/">@Messages("root.nav.main")</a></li>
+                        <li><a title="@Messages("root.nav.terms")" href="@lCode#">@Messages("root.nav.terms")</a></li>
+                        <li><a title="@Messages("root.nav.feedback")" href="@lCode#">@Messages("root.nav.feedback")</a></li>
+                        <li><a title="@Messages("root.nav.site_map")" href="@lCode#">@Messages("root.nav.site_map")</a></li>
                     </ul>
-                    <p class="c">Копирайт 2013-2014 RandomRent.info © Все права защищены</p>
-                </div>
-            </div>
-
-            <img alt="" id="ajax-loader" style="display : none ; margin-bottom : 0 ; margin-left : 5px" src="@routes.ResourceManager.getResource("/images/ajax-loader.gif")" />
-
-            <div id="sign-in-dialog" title="Вход в личный кабинет" style="display : none ;" data-lift="LogInForm.loggedOut">
-                <div class="sign-in-form">
-                    <form class="lift:form.ajax">
-                        <div class="lift:LogInForm.logIn?form=post">
-                            <table>
-                                <tr>
-                                    <td>E-mail:</td>
-                                    <td><input name="sign-in-mail-input" type="text" /></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"><span class="lift:Msg?id=sign-in-mail-err;errorClass=error"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Пароль:</td>
-                                    <td><input name="sign-in-pass-input" type="password" /></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"><span class="lift:Msg?id=sign-in-pass-err;errorClass=error"></span></td>
-                                </tr>
-                            </table>
-                            <input class="button" type="submit" value="Войти" />
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div id="sign-up-dialog" title="Регистрация в системе" style="display : none ;">
-                <div class="sign-up-form">
-                    <form class="lift:form.ajax">
-                        <div class="lift:RegistrationForm.regForm?form=post">
-                            <table>
-                                <tr>
-                                    <td>E-mail:</td>
-                                    <td><input name="sign-up-mail-input" type="text" value="" /></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"><span class="lift:Msg?id=sign-up-mail-err;errorClass=error"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Пароль:</td>
-                                    <td><input name="sign-up-pass-input" type="password" value="" /></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"><span class="lift:Msg?id=sign-up-pass-err;errorClass=error"></span></td>
-                                </tr>
-                                <tr>
-                                    <td>Еще раз:</td>
-                                    <td><input name="sign-up-re-pass-input" type="password" value="" /></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="2"><span class="lift:Msg?id=sign-up-repass-err;errorClass=error"></span></td>
-                                </tr>
-                            </table>
-                            <input class="button" type="submit" value="Регистрация" />
-                        </div>
-                    </form>
+                    <p class="c">@Messages("root.copyright")</p>
                 </div>
             </div>
         </body>
