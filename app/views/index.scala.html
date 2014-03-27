@@ -1,7 +1,7 @@
 @(provinces: Map[Long, List[String]])(implicit l: Lang, r: RequestHeader)
 
     @lPrefix = @{
-        if(l.code.equals("ru")) "/" else "/" + l.code
+        if(l.code.equals("ru")) "" else "/" + l.code
     }
 
     @metaTags = {
