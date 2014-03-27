@@ -1,7 +1,7 @@
 @(provinces: Map[Long, List[String]])(implicit l: Lang, r: RequestHeader)
 
     @lPrefix = @{
-        if(l.code.equals("ru")) "" else "/" + l.code
+        if(l.code.equals("ru")) "/" else "/" + l.code
     }
 
     @metaTags = {
@@ -113,7 +113,7 @@
                 <ul id="more-cities-region-@p._1" class="more-cities-pop-up">
                     <li class="title">Другие города:</li>
                     @for(c <- p._2) {
-                        <li><a href="@lPrefix @c">@c</a></li>
+                        <li><a href="@lPrefix/@c">@c</a></li>
                     }
                 </ul>
             }
